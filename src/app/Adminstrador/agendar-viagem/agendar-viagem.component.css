@@ -1,0 +1,17 @@
+@import '../admin-inicio/admin-inicio.component.css';
+
+.form-card label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.form-card input,
+.form-card textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #444;
+  color: #eee;
+  font-size: 1rem;
+}

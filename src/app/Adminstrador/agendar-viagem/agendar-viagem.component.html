@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>Agendar Viagem</h2>
+
+  <div class="card form-card">
+    <label>
+      Veículo*:
+      <input [(ngModel)]="veiculo" placeholder="Digite o veículo" />
+    </label>
+
+    <label>
+      Motorista*:
+      <input [(ngModel)]="motorista" placeholder="Digite o motorista" />
+    </label>
+
+    <label>
+      Data e Hora de Saída*:
+      <input type="datetime-local" [(ngModel)]="dataHoraSaida" />
+    </label>
+
+    <label>
+      Destino*:
+      <input [(ngModel)]="destino" placeholder="Digite o destino" />
+    </label>
+
+    <label>
+      Justificativa:
+      <textarea [(ngModel)]="justificativa" rows="3" placeholder="Opcional"></textarea>
+    </label>
+
+    <button (click)="agendar()" class="btn-acao">Agendar</button>
+  </div>
+</div>

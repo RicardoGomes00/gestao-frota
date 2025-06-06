@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>Registrar Abastecimento</h2>
+
+  <div class="card form-card">
+    <label>
+      Veículo*:
+      <input [(ngModel)]="veiculo" />
+    </label>
+    <label>
+      Data*:
+      <input type="date" [(ngModel)]="data" />
+    </label>
+    <label>
+      Tipo de combustível*:
+      <input [(ngModel)]="tipoCombustivel" />
+    </label>
+    <label>
+      Valor*:
+      <input type="number" [(ngModel)]="valor" />
+    </label>
+    <label>
+      Quilometragem no momento*:
+      <input type="number" [(ngModel)]="quilometragem" />
+    </label>
+    <label>
+      Motorista responsável*:
+      <input [(ngModel)]="motorista" />
+    </label>
+
+    <button (click)="registrar()" class="btn-acao">Registrar</button>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="container">
+  <h2>Cadastro e Gerenciamento de Motoristas</h2>
+
+  <div class="card form-card">
+    <label>
+      Nome completo*:
+      <input [(ngModel)]="novoMotorista.nome" />
+    </label>
+    <label>
+      CPF*:
+      <input [(ngModel)]="novoMotorista.cpf" />
+    </label>
+    <label>
+      CNH*:
+      <input [(ngModel)]="novoMotorista.cnh" />
+    </label>
+    <label>
+      Validade CNH*:
+      <input type="date" [(ngModel)]="novoMotorista.validadeCnh" />
+    </label>
+    <label>
+      Telefone:
+      <input [(ngModel)]="novoMotorista.telefone" />
+    </label>
+    <label>
+      Endereço:
+      <input [(ngModel)]="novoMotorista.endereco" />
+    </label>
+    <label>
+      E-mail:
+      <input [(ngModel)]="novoMotorista.email" />
+    </label>
+
+    <button (click)="adicionarMotorista()" class="btn-acao">Adicionar Motorista</button>
+  </div>
+
+  <div *ngFor="let m of motoristas" class="card">
+    <p><strong>Nome:</strong> {{ m.nome }} <span *ngIf="!m.ativo" style="color:#dc3545;">(Inativo)</span></p>
+    <p><strong>CPF:</strong> {{ m.cpf }}</p>
+    <p><strong>CNH:</strong> {{ m.cnh }}</p>
+    <p><strong>Validade CNH:</strong> {{ m.validadeCnh | date }}</p>
+    <p><strong>Telefone:</strong> {{ m.telefone }}</p>
+    <p><strong>Endereço:</strong> {{ m.endereco }}</p>
+    <p><strong>E-mail:</strong> {{ m.email }}</p>
+
+    <button class="btn-acao" (click)="inativarMotorista(m)" [disabled]="!m.ativo">
+      Inativar
+    </button>
+  </div>
+</div>

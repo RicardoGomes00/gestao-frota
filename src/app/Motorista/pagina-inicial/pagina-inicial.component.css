@@ -1,0 +1,80 @@
+/* Fundo geral da página */
+body, .container {
+  background-color: #f2f2f2; /* cinza claro */
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+}
+
+/* Título */
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* Card de agendamento */
+.card {
+  background-color: #e0e0e0; /* cinza médio */
+  border: 2px solid #ffc107; /* borda amarela */
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.01);
+}
+
+/* Texto dentro dos cards */
+.card p {
+  margin: 0.3rem 0;
+  color: #444;
+}
+
+/* Botões personalizados */
+.card button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Estilo diferente por status */
+button {
+  background-color: #007bff; /* azul padrão */
+  color: white;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Cores diferentes por tipo de ação (opcional) */
+button.iniciar {
+  background-color: #28a745;
+}
+
+button.iniciar:hover {
+  background-color: #218838;
+}
+
+button.finalizar {
+  background-color: #dc3545;
+}
+
+button.finalizar:hover {
+  background-color: #c82333;
+}
+
+button.detalhes {
+  background-color: #6c757d;
+}
+
+button.detalhes:hover {
+  background-color: #5a6268;
+}

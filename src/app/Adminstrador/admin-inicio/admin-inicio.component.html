@@ -1,0 +1,39 @@
+<div class="container">
+  <h2>Início do Administrador</h2>
+
+  <div class="filtros card">
+    <label>
+      Motorista:
+      <input [(ngModel)]="filtroMotorista" placeholder="Filtrar por motorista" />
+    </label>
+    <label>
+      Status:
+      <select [(ngModel)]="filtroStatus">
+        <option value="">Todos</option>
+        <option value="PENDENTE">Pendente</option>
+        <option value="EM USO">Em Uso</option>
+        <option value="FINALIZADO">Finalizado</option>
+      </select>
+    </label>
+    <label>
+      Data Início:
+      <input type="date" [(ngModel)]="filtroDataInicio" />
+    </label>
+    <label>
+      Data Fim:
+      <input type="date" [(ngModel)]="filtroDataFim" />
+    </label>
+  </div>
+
+  <div *ngFor="let agendamento of filtrarAgendamentos()" class="card">
+    <p><strong>Motorista:</strong> {{ agendamento.motorista }}</p>
+    <p><strong>Veículo:</strong> {{ agendamento.veiculo }}</p>
+    <p><strong>Destino:</strong> {{ agendamento.destino }}</p>
+    <p><strong>Data/Hora Saída:</strong> {{ agendamento.dataHoraSaida | date:'short' }}</p>
+    <p><strong>Status:</strong> {{ agendamento.status }}</p>
+
+    <button (click)="acaoBotao(agendamento)" class="btn-acao">
+      {{ agendamento.status === 'PENDENTE' ? 'Agendar Viagem' : agendamento.status === 'EM USO' ? 'Registrar Abastecimento' : 'Registrar Manutenção' }}
+    </button>
+  </div>
+</div>

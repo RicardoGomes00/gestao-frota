@@ -1,0 +1,13 @@
+<div class="container">
+  <h2>Solicitar Ocorrência</h2>
+
+  <div class="card">
+    <label>Veículo:</label>
+    <input [(ngModel)]="veiculo" type="text" placeholder="Digite o veículo" />
+
+    <label>Descrição do Problema:</label>
+    <textarea [(ngModel)]="descricao" rows="4" placeholder="Descreva o problema..."></textarea>
+
+    <button (click)="enviarOcorrencia()">Enviar Ocorrência</button>
+  </div>
+</div>

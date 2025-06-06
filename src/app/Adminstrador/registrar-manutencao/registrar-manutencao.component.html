@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>Registrar Manutenção</h2>
+
+  <div class="card form-card">
+    <label>
+      Data*:
+      <input type="date" [(ngModel)]="data" />
+    </label>
+    <label>
+      Tipo*:
+      <select [(ngModel)]="tipo">
+        <option value="" disabled selected>Selecione o tipo</option>
+        <option value="Preventiva">Preventiva</option>
+        <option value="Corretiva">Corretiva</option>
+      </select>
+    </label>
+    <label>
+      Descrição*:
+      <textarea rows="3" [(ngModel)]="descricao"></textarea>
+    </label>
+    <label>
+      Valor*:
+      <input type="number" [(ngModel)]="valor" />
+    </label>
+    <label>
+      Quilometragem Atual*:
+      <input type="number" [(ngModel)]="quilometragem" />
+    </label>
+
+    <button (click)="registrar()" class="btn-acao">Registrar</button>
+  </div>
+</div>

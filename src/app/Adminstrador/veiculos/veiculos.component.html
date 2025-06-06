@@ -1,0 +1,16 @@
+<div class="container">
+  <h2>Cadastro e Gerenciamento de Veículos</h2>
+
+  <div *ngFor="let v of veiculos" class="card">
+    <p><strong>Placa:</strong> {{ v.placa }}</p>
+    <p><strong>Modelo:</strong> {{ v.modelo }}</p>
+    <p><strong>Tipo:</strong> {{ v.tipo }}</p>
+    <p><strong>Ano:</strong> {{ v.ano }}</p>
+    <p><strong>Quilometragem Atual:</strong> {{ v.quilometragem }}</p>
+    <p><strong>Status:</strong> {{ v.status }}</p>
+
+    <button class="btn-acao" (click)="alternarStatus(v)">
+      {{ v.status === 'Inativo' ? 'Ativar' : 'Inativar' }}
+    </button>
+  </div>
+</div>

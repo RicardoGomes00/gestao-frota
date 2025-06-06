@@ -1,0 +1,32 @@
+<div class="navbar">
+  <div class="navbar-nav">
+    
+    <ng-container *ngIf="perfilAtual === 'ADMIN'">
+      <button
+        *ngFor="let item of adminRotas"
+        class="btn-nav"
+        [ngClass]="getButtonClass(item.rota)"
+        (click)="navigateTo(item.rota)">
+        {{ item.label }}
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="perfilAtual === 'MOTORISTA'">
+      <button
+        *ngFor="let item of motoristaRotas"
+        class="btn-nav"
+        [ngClass]="getButtonClass(item.rota)"
+        (click)="navigateTo(item.rota)">
+        {{ item.label }}
+      </button>
+    </ng-container>
+
+  </div>
+
+  <div class="navbar-right">
+    <button class="btn-nav logout" (click)="sair()">
+      Sair
+    </button>
+  </div>
+</div>
+

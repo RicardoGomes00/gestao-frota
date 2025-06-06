@@ -1,0 +1,11 @@
+<div class="container">
+  <h2>Histórico de Viagens</h2>
+
+  <div *ngFor="let viagem of historico" class="card">
+    <p><strong>Veículo:</strong> {{ viagem.veiculo }}</p>
+    <p><strong>Destino:</strong> {{ viagem.destino }}</p>
+    <p><strong>Data de Saída:</strong> {{ viagem.dataSaida | date:'short' }}</p>
+    <p><strong>Data de Retorno:</strong> {{ viagem.dataRetorno | date:'short' }}</p>
+    <p><strong>KM Inicial:</strong> {{ viagem.kmInicial }} | <strong>KM Final:</strong> {{ viagem.kmFinal }}</p>
+  </div>
+</div>
