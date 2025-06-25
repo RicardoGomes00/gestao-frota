@@ -1,50 +1,58 @@
 <div class="container">
-  <h2>Cadastro e Gerenciamento de Motoristas</h2>
+  <h2>Cadastro e Gerenciamento de Usuários</h2>
 
-  <div class="card form-card">
-    <label>
-      Nome completo*:
-      <input [(ngModel)]="novoMotorista.nome" />
+  <div *ngIf="modoFormulario" class="card filtros">
+    <h3>{{ usuarioEmEdicao.id ? 'Editando Usuário' : 'Novo Usuário' }}</h3>
+    
+    <label>Nome completo*:<input [(ngModel)]="usuarioEmEdicao.nome" /></label>
+    <label>CPF*:<input [(ngModel)]="usuarioEmEdicao.cpf" /></label>
+    <label>CNH*:<input [(ngModel)]="usuarioEmEdicao.cnh" /></label>
+    <label>Validade CNH*:<input type="date" [(ngModel)]="usuarioEmEdicao.validadeCnh" /></label>
+    <label>Telefone:<input [(ngModel)]="usuarioEmEdicao.telefone" /></label>
+    <label>E-mail*:<input type="email" [(ngModel)]="usuarioEmEdicao.email" /></label>
+    <label>Senha*:<input type="password" [(ngModel)]="usuarioEmEdicao.senha" /></label>
+    <label>Perfil*:<select [(ngModel)]="usuarioEmEdicao.perfil">
+        <option [ngValue]="null" disabled>Selecione um perfil</option>
+        <option value="MOTORISTA">Motorista</option>
+        <option value="ADMIN">Administrador</option>
+      </select>
     </label>
-    <label>
-      CPF*:
-      <input [(ngModel)]="novoMotorista.cpf" />
-    </label>
-    <label>
-      CNH*:
-      <input [(ngModel)]="novoMotorista.cnh" />
-    </label>
-    <label>
-      Validade CNH*:
-      <input type="date" [(ngModel)]="novoMotorista.validadeCnh" />
-    </label>
-    <label>
-      Telefone:
-      <input [(ngModel)]="novoMotorista.telefone" />
-    </label>
-    <label>
-      Endereço:
-      <input [(ngModel)]="novoMotorista.endereco" />
-    </label>
-    <label>
-      E-mail:
-      <input [(ngModel)]="novoMotorista.email" />
-    </label>
-
-    <button (click)="adicionarMotorista()" class="btn-acao">Adicionar Motorista</button>
+    <label>CEP*:<input [(ngModel)]="usuarioEmEdicao.cep" (blur)="consultarCep()" placeholder="Apenas números" /></label>
+    <label>Logradouro:<input [(ngModel)]="usuarioEmEdicao.logradouro" [readOnly]="true" /></label>
+    <label>Número*:<input [(ngModel)]="usuarioEmEdicao.numero" /></label>
+    <label>Bairro:<input [(ngModel)]="usuarioEmEdicao.bairro" [readOnly]="true" /></label>
+    <label>Cidade:<input [(ngModel)]="usuarioEmEdicao.cidade" [readOnly]="true" /></label>
+    <label>UF:<input [(ngModel)]="usuarioEmEdicao.uf" [readOnly]="true" /></label>
+    
+    <div>
+      <button (click)="salvarUsuario()" class="btn-acao">
+        {{ usuarioEmEdicao.id ? 'Salvar Alterações' : 'Adicionar Usuário' }}
+      </button>
+      <button (click)="cancelarEdicao()" class="btn-acao inativar" style="margin-left: 1rem;">
+        Cancelar
+      </button>
+    </div>
   </div>
 
-  <div *ngFor="let m of motoristas" class="card">
-    <p><strong>Nome:</strong> {{ m.nome }} <span *ngIf="!m.ativo" style="color:#dc3545;">(Inativo)</span></p>
-    <p><strong>CPF:</strong> {{ m.cpf }}</p>
-    <p><strong>CNH:</strong> {{ m.cnh }}</p>
-    <p><strong>Validade CNH:</strong> {{ m.validadeCnh | date }}</p>
-    <p><strong>Telefone:</strong> {{ m.telefone }}</p>
-    <p><strong>Endereço:</strong> {{ m.endereco }}</p>
-    <p><strong>E-mail:</strong> {{ m.email }}</p>
+  <div *ngIf="!modoFormulario" style="margin-bottom: 1.5rem;">
+    <button class="btn-acao" (click)="iniciarAdicao()">+ Adicionar Novo Usuário</button>
+  </div>
 
-    <button class="btn-acao" (click)="inativarMotorista(m)" [disabled]="!m.ativo">
-      Inativar
-    </button>
+  <h3>Usuários Cadastrados</h3>
+
+  <div *ngIf="!isLoading && !error">
+    <div *ngFor="let m of motoristas" class="card">
+      <p><strong>Nome:</strong> {{ m.nome }} <span *ngIf="!m.ativo" style="color:#dc3545; font-weight: bold;">(Inativo)</span></p>
+      <p><strong>Perfil:</strong> {{ m.perfil }}</p>
+      <p><strong>Email:</strong> {{ m.email }}</p>
+      <p><strong>Telefone:</strong> {{ m.telefone }}</p>
+      
+      <div style="margin-top: 1rem;">
+        <button class="btn-acao" (click)="iniciarEdicao(m)">Editar</button>
+        <button class="btn-acao inativar" (click)="inativarMotorista(m)" *ngIf="m.ativo" style="margin-left: 1rem;">
+          Inativar
+        </button>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,32 +1,72 @@
 <div class="container">
-  <h2>Registrar Abastecimento</h2>
+  <h2>Registro de Abastecimentos</h2>
 
-  <div class="card form-card">
+  <!-- Formulário de Cadastro -->
+  <div class="card filtros"> <!-- Usando a classe 'filtros' para o layout lado a lado -->
+    <h3>Novo Registro</h3>
+    
     <label>
       Veículo*:
-      <input [(ngModel)]="veiculo" />
-    </label>
-    <label>
-      Data*:
-      <input type="date" [(ngModel)]="data" />
-    </label>
-    <label>
-      Tipo de combustível*:
-      <input [(ngModel)]="tipoCombustivel" />
-    </label>
-    <label>
-      Valor*:
-      <input type="number" [(ngModel)]="valor" />
-    </label>
-    <label>
-      Quilometragem no momento*:
-      <input type="number" [(ngModel)]="quilometragem" />
-    </label>
-    <label>
-      Motorista responsável*:
-      <input [(ngModel)]="motorista" />
+      <!-- Usando <select> em vez de <input> -->
+      <select [(ngModel)]="novoRegistro.veiculoId">
+        <option [ngValue]="null" disabled>Selecione um veículo</option>
+        <option *ngFor="let v of veiculosDisponiveis" [ngValue]="v.id">
+          {{ v.modelo }} ({{ v.placa }})
+        </option>
+      </select>
     </label>
 
-    <button (click)="registrar()" class="btn-acao">Registrar</button>
+    <label>
+      Data*:
+      <input type="date" [(ngModel)]="novoRegistro.data" />
+    </label>
+    
+    <label>
+      Tipo de combustível*:
+      <select [(ngModel)]="novoRegistro.tipoCombustivel">
+          <option [ngValue]="null" disabled>Selecione</option>
+          <option value="Gasolina">Gasolina</option>
+          <option value="Etanol">Etanol</option>
+          <option value="Diesel">Diesel</option>
+      </select>
+    </label>
+    
+    <label>
+      Valor (R$)*:
+      <input type="number" [(ngModel)]="novoRegistro.valor" />
+    </label>
+    
+    <label>
+      Quilometragem no momento*:
+      <input type="number" [(ngModel)]="novoRegistro.quilometragem" />
+    </label>
+    
+    <label>
+      Motorista responsável*:
+      <!-- Usando <select> em vez de <input> -->
+      <select [(ngModel)]="novoRegistro.motoristaId">
+        <option [ngValue]="null" disabled>Selecione um motorista</option>
+        <option *ngFor="let m of motoristasDisponiveis" [ngValue]="m.id">
+          {{ m.nome }}
+        </option>
+      </select>
+    </label>
+
+    <button (click)="salvarRegistro()" class="btn-acao">Registrar</button>
+  </div>
+
+
+  <!-- Lista de Registros Recentes -->
+  <h3>Registros Recentes</h3>
+  <p *ngIf="isLoading">Carregando registros...</p>
+
+  <div *ngIf="!isLoading">
+    <div *ngFor="let registro of abastecimentos" class="card">
+      <p><strong>Veículo:</strong> {{ registro.veiculo?.modelo }} ({{ registro.veiculo?.placa }})</p>
+      <p><strong>Data:</strong> {{ registro.data | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Valor:</strong> {{ registro.valor | currency:'BRL' }}</p>
+      <p><strong>Motorista:</strong> {{ registro.motorista?.nome }}</p>
+      <p><strong>KM no Abastecimento:</strong> {{ registro.quilometragem | number }}</p>
+    </div>
   </div>
 </div>

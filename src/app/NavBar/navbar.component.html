@@ -5,8 +5,7 @@
       <button
         *ngFor="let item of adminRotas"
         class="btn-nav"
-        [ngClass]="getButtonClass(item.rota)"
-        (click)="navigateTo(item.rota)">
+        [class.active]="currentRoute === item.rota" (click)="navigateTo(item.rota)">
         {{ item.label }}
       </button>
     </ng-container>
@@ -15,8 +14,7 @@
       <button
         *ngFor="let item of motoristaRotas"
         class="btn-nav"
-        [ngClass]="getButtonClass(item.rota)"
-        (click)="navigateTo(item.rota)">
+        [class.active]="currentRoute === item.rota" (click)="navigateTo(item.rota)">
         {{ item.label }}
       </button>
     </ng-container>
@@ -29,4 +27,3 @@
     </button>
   </div>
 </div>
-

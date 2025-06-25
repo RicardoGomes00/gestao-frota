@@ -1,18 +1,29 @@
 <div class="container">
   <h2>Meus Agendamentos</h2>
-  <div *ngFor="let agendamento of agendamentos" class="card">
-    <p><strong>Data:</strong> {{ agendamento.data | date:'short' }}</p>
-    <p><strong>Veículo:</strong> {{ agendamento.veiculo }}</p>
-    <p><strong>Destino:</strong> {{ agendamento.destino }}</p>
-    <p><strong>Status:</strong> {{ agendamento.status }}</p>
 
-    <button *ngIf="agendamento.status === 'AGENDADO'" class="iniciar" (click)="iniciarViagem(agendamento)">Iniciar
-      Viagem</button>
+  <p *ngIf="isLoading">Carregando agendamentos...</p>
 
-    <button *ngIf="agendamento.status === 'EM USO'" class="finalizar" (click)="finalizarViagem(agendamento)">Finalizar
-      Viagem</button>
+  <p *ngIf="error">{{ error }}</p>
 
-    <button *ngIf="agendamento.status !== 'AGENDADO' && agendamento.status !== 'EM USO'" class="detalhes"
-      (click)="verDetalhes(agendamento)">Ver Detalhes</button>
+  <div *ngIf="!isLoading && !error" class="card-container">
+    <div *ngFor="let agendamento of agendamentos" class="card">
+      
+      <p><strong>Data:</strong> {{ agendamento.dataHoraSaida | date:'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>Veículo:</strong> {{ agendamento.veiculo.modelo }} ({{ agendamento.veiculo.placa }})</p>
+      <p><strong>Destino:</strong> {{ agendamento.destino }}</p>
+      <p><strong>Status:</strong> {{ agendamento.status }}</p>
+
+      <button *ngIf="agendamento.status === 'AGENDADO'" class="iniciar" (click)="iniciarViagem(agendamento)">
+        Iniciar Viagem
+      </button>
+
+      <button *ngIf="agendamento.status === 'EM_USO'" class="finalizar" (click)="finalizarViagem(agendamento)">
+        Finalizar Viagem
+      </button>
+
+      <button *ngIf="agendamento.status === 'FINALIZADO'" class="detalhes" (click)="verDetalhes(agendamento)">
+        Ver Detalhes
+      </button>
+    </div>
   </div>
 </div>

@@ -1,0 +1,88 @@
+/* Fundo geral da página */
+body {
+  background-color: #f2f2f2; 
+  font-family: Arial, sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+:host {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+}
+
+/* Título */
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* Card de login */
+.card.login-card {
+  background-color: #e0e0e0; 
+  border: 2px solid #ffc107; 
+  border-radius: 12px;
+  padding: 2.5rem; 
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para o formulário */
+.login-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #444;
+  font-weight: bold;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box; 
+}
+
+.error-message {
+  color: #dc3545; 
+  text-align: center;
+  margin-top: -1rem;
+  margin-bottom: 1rem;
+  min-height: 1.2em; 
+}
+
+/* Botão de Entrar */
+button {
+  width: 100%; 
+  margin-top: 1rem;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

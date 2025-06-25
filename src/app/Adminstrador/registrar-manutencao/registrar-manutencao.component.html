@@ -1,32 +1,50 @@
 <div class="container">
-  <h2>Registrar Manutenção</h2>
+  <h2>Registro de Manutenções</h2>
 
-  <div class="card form-card">
+  <!-- Formulário de Cadastro -->
+  <div class="card filtros"> <!-- Usando a classe 'filtros' para o layout -->
+    <h3>Novo Registro de Manutenção</h3>
+    
     <label>
-      Data*:
-      <input type="date" [(ngModel)]="data" />
+      Veículo*:
+      <!-- Adicionamos o seletor de veículo, que é crucial -->
+      <select [(ngModel)]="novoRegistro.veiculoId">
+        <option [ngValue]="null" disabled>Selecione um veículo</option>
+        <option *ngFor="let v of veiculosDisponiveis" [ngValue]="v.id">
+          {{ v.modelo }} ({{ v.placa }})
+        </option>
+      </select>
     </label>
-    <label>
-      Tipo*:
-      <select [(ngModel)]="tipo">
-        <option value="" disabled selected>Selecione o tipo</option>
+
+    <label>Data*:<input type="date" [(ngModel)]="novoRegistro.data" /></label>
+    
+    <label>Tipo*:<select [(ngModel)]="novoRegistro.tipo">
+        <option value="" disabled>Selecione o tipo</option>
         <option value="Preventiva">Preventiva</option>
         <option value="Corretiva">Corretiva</option>
       </select>
     </label>
-    <label>
-      Descrição*:
-      <textarea rows="3" [(ngModel)]="descricao"></textarea>
-    </label>
-    <label>
-      Valor*:
-      <input type="number" [(ngModel)]="valor" />
-    </label>
-    <label>
-      Quilometragem Atual*:
-      <input type="number" [(ngModel)]="quilometragem" />
-    </label>
 
-    <button (click)="registrar()" class="btn-acao">Registrar</button>
+    <label>Valor (R$)*:<input type="number" [(ngModel)]="novoRegistro.valor" /></label>
+    
+    <label>Quilometragem Atual*:<input type="number" [(ngModel)]="novoRegistro.quilometragem" /></label>
+    
+    <label>Descrição*:<textarea rows="3" [(ngModel)]="novoRegistro.descricao"></textarea></label>
+    
+    <button (click)="salvarRegistro()" class="btn-acao">Registrar</button>
+  </div>
+
+
+  <!-- Lista de Registros Recentes -->
+  <h3>Registros Anteriores</h3>
+  <p *ngIf="isLoading">Carregando registros...</p>
+
+  <div *ngIf="!isLoading">
+    <div *ngFor="let registro of manutencoes" class="card">
+      <p><strong>Veículo:</strong> {{ registro.veiculo?.modelo }} ({{ registro.veiculo?.placa }})</p>
+      <p><strong>Data:</strong> {{ registro.data | date:'dd/MM/yyyy' }} | <strong>Tipo:</strong> {{ registro.tipo }}</p>
+      <p><strong>Valor:</strong> {{ registro.valor | currency:'BRL' }}</p>
+      <p><strong>Descrição:</strong> {{ registro.descricao }}</p>
+    </div>
   </div>
 </div>

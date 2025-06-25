@@ -1,1 +1,7 @@
 @import '../admin-inicio/admin-inicio.component.css';
+
+.filtros label {
+  display: inline-block; 
+  margin-right: 1.5rem;
+  margin-bottom: 1rem;
+}

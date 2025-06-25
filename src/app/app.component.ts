@@ -1,26 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './NavBar/navbar.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './Services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    NavbarComponent,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
+  title = 'seu-projeto';
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
-  ngOnInit() {
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 }

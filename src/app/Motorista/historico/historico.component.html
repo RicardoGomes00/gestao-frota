@@ -1,11 +1,20 @@
 <div class="container">
   <h2>Histórico de Viagens</h2>
 
-  <div *ngFor="let viagem of historico" class="card">
-    <p><strong>Veículo:</strong> {{ viagem.veiculo }}</p>
-    <p><strong>Destino:</strong> {{ viagem.destino }}</p>
-    <p><strong>Data de Saída:</strong> {{ viagem.dataSaida | date:'short' }}</p>
-    <p><strong>Data de Retorno:</strong> {{ viagem.dataRetorno | date:'short' }}</p>
-    <p><strong>KM Inicial:</strong> {{ viagem.kmInicial }} | <strong>KM Final:</strong> {{ viagem.kmFinal }}</p>
+  <p *ngIf="isLoading">Carregando histórico...</p>
+  <p *ngIf="error">{{ error }}</p>
+
+  <div *ngIf="!isLoading && !error">
+    <div *ngIf="historico.length === 0" class="card">
+      <p>Nenhuma viagem finalizada encontrada no seu histórico.</p>
+    </div>
+
+    <div *ngFor="let viagem of historico" class="card">
+      <p><strong>Veículo:</strong> {{ viagem.veiculo.modelo }} ({{ viagem.veiculo.placa }})</p>
+      <p><strong>Destino:</strong> {{ viagem.destino }}</p>
+      <p><strong>Data de Saída:</strong> {{ viagem.dataHoraSaida | date:'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>Data de Retorno:</strong> {{ viagem.dataHoraRetorno | date:'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>KM Inicial:</strong> {{ viagem.quilometragemInicial }} | <strong>KM Final:</strong> {{ viagem.quilometragemFinal }}</p>
+    </div>
   </div>
 </div>

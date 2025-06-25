@@ -47,3 +47,9 @@
   background-color: #dc3545;
   color: white;
 }
+
+.btn-nav.active {
+  background-color: #ffc107;
+  color: #2c2c2c;
+  font-weight: bold;
+}

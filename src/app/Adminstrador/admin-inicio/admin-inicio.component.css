@@ -93,3 +93,23 @@
 .btn-acao:hover {
   background-color: #e6ac00;
 }
+
+.status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+.status.AGENDADO {
+  background-color: #007bff; /* Azul */
+  color: white;
+}
+.status.EM_USO {
+  background-color: #28a745; /* Verde */
+  color: white;
+}
+.status.FINALIZADO {
+  background-color: #6c757d; /* Cinza */
+  color: white;
+}

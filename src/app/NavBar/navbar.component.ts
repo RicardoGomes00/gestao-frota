@@ -1,98 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
-import { NgClass, CommonModule } from '@angular/common';
-
-enum Perfil {
-  ADMIN = 'ADMIN',
-  MOTORISTA = 'MOTORISTA'
-}
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../Services/auth.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, NgClass],
+  imports: [CommonModule], 
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   currentRoute: string = '';
-  perfilAtual: Perfil = Perfil.ADMIN;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.currentRoute = (event as NavigationEnd).urlAfterRedirects;
-        console.log('Rota atual:', this.currentRoute);
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => { 
+        this.currentRoute = event.urlAfterRedirects;
       });
   }
 
+  get perfilAtual(): 'ADMIN' | 'MOTORISTA' | null {
+    return this.authService.getUserProfile();
+  }
+
   adminRotas = [
-    { rota: '/admin/inicio', label: 'Dashboard Admin' },
-    { rota: '/admin/veiculos', label: 'Veiculos' },
-    { rota: '/admin/motoristas', label: 'Motorista' },
+    { rota: '/admin/inicio', label: 'Dashboard' },
+    { rota: '/admin/veiculos', label: 'Veículos' },
+    { rota: '/admin/motoristas', label: 'Usuários' },
+    { rota: '/admin/agendar-viagem', label: 'Agendar Viagem' },
     { rota: '/admin/registrar-abastecimento', label: 'Abastecimento' },
-    { rota: '/admin/registrar-manutencao', label: 'Manutencao' },
+    { rota: '/admin/registrar-manutencao', label: 'Manutenção' },
   ];
 
   motoristaRotas = [
-    { rota: '/motorista/inicio', label: 'Dashboard Motorista' },
-    { rota: '/motorista/ocorrencias', label: 'Ocorrencias' },
-    { rota: '/motorista/historico', label: 'Historico' },
+    { rota: '/motorista/inicio', label: 'Viagens' },
+    { rota: '/motorista/ocorrencias', label: 'Ocorrências' },
+    { rota: '/motorista/historico', label: 'Histórico' },
   ];
-
-  getNavbarClass(): string {
-    const adminRotas = [
-      '/admin/inicio',
-      'admin/veiculos',
-      '/admin/motoristas',
-      '/admin/registrar-abastecimento',
-      'admin/registrar-manutencao',
-    ];
   
-    const motoristaRotas = [
-      '/motorista/inicio',
-      '/motorista/historico',
-      '/motorista/ocorrencias',
-    ];
-    return ''; // Sem classe extra
-  }
 
-  getButtonClass(route: string): string {
-    const adminRotas = [
-      '/admin/inicio',
-      'admin/veiculos',
-      '/admin/motoristas',
-      '/admin/registrar-abastecimento',
-      'admin/registrar-manutencao',
-    ];
-  
-    const motoristaRotas = [
-      '/motorista/inicio',
-      '/motorista/historico',
-      '/motorista/ocorrencias',
-    ];
-  
-    const loginRotas = [
-      '/login',
-      '/login/recuperar'
-    ];
-    return 'btn-outline';
-  }
 
-  navigateTo(route: string) {
+  navigateTo(route: string): void {
     this.router.navigate([route]);
   }
 
-  sair() {
-    // Simulação de logout - limpe localStorage ou redirecione
-    alert('Você saiu da conta.');
-    localStorage.clear(); // se usar localStorage para login
-    this.router.navigate(['/']); // redireciona para login ou página inicial
+  sair(): void {
+    this.authService.logout();
   }
-
 }

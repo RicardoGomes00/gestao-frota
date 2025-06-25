@@ -1,13 +1,18 @@
 <div class="container">
-  <h2>Solicitar Ocorrência</h2>
+  <h2>Registrar Ocorrência</h2>
 
   <div class="card">
-    <label>Veículo:</label>
-    <input [(ngModel)]="veiculo" type="text" placeholder="Digite o veículo" />
+    <label for="viagem">Viagem Associada:</label>
+    <select id="viagem" [(ngModel)]="viagemIdSelecionada" required>
+      <option [ngValue]="null" disabled>Selecione uma viagem</option>
+      <option *ngFor="let viagem of viagensDisponiveis" [ngValue]="viagem.id">
+        {{ viagem.veiculo.modelo }} ({{ viagem.veiculo.placa }}) - Destino: {{ viagem.destino }}
+      </option>
+    </select>
 
-    <label>Descrição do Problema:</label>
-    <textarea [(ngModel)]="descricao" rows="4" placeholder="Descreva o problema..."></textarea>
+    <label for="descricao">Descrição do Problema:</label>
+    <textarea id="descricao" [(ngModel)]="descricao" rows="4" placeholder="Descreva o problema em detalhes..." required></textarea>
 
-    <button (click)="enviarOcorrencia()">Enviar Ocorrência</button>
+    <button (click)="enviarOcorrencia()" [disabled]="!viagemIdSelecionada || !descricao">Enviar Ocorrência</button>
   </div>
 </div>

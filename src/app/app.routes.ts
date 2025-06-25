@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './Guards/auth.guard';
+import { LoginComponent } from './Cadastro/login.component';
 
 // Motorista
 import { PaginaInicialComponent } from './Motorista/pagina-inicial/pagina-inicial.component';
@@ -11,23 +13,41 @@ import { VeiculosComponent } from './Adminstrador/veiculos/veiculos.component';
 import { MotoristasComponent } from './Adminstrador/motoristas/motoristas.component';
 import { RegistrarAbastecimentoComponent } from './Adminstrador/registrar-abastecimento/registrar-abastecimento.component';
 import { RegistrarManutencaoComponent } from './Adminstrador/registrar-manutencao/registrar-manutencao.component';
+import { AgendarViagemComponent } from './Adminstrador/agendar-viagem/agendar-viagem.component';
 
 export const routes: Routes = [
-  // Redirecionamento padrão para página inicial do motorista
-  { path: '', redirectTo: '/motorista/inicio', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
 
-  // Rotas Motorista
-  { path: 'motorista/inicio', component: PaginaInicialComponent },
-  { path: 'motorista/ocorrencias', component: OcorrenciaComponent },
-  { path: 'motorista/historico', component: HistoricoComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  // Rotas Administrador
-  { path: 'admin/inicio', component: AdminInicioComponent },
-  { path: 'admin/veiculos', component: VeiculosComponent },
-  { path: 'admin/motoristas', component: MotoristasComponent },
-  { path: 'admin/registrar-abastecimento', component: RegistrarAbastecimentoComponent },
-  { path: 'admin/registrar-manutencao', component: RegistrarManutencaoComponent },
+  // Rotas do Motorista
+  {
+    path: 'motorista',
+    canActivate: [authGuard], 
+    data: { expectedRole: 'MOTORISTA' }, 
+    children: [
+      { path: 'inicio', component: PaginaInicialComponent },
+      { path: 'ocorrencias', component: OcorrenciaComponent },
+      { path: 'historico', component: HistoricoComponent },
+      { path: '', redirectTo: 'inicio', pathMatch: 'full' }
+    ]
+  },
 
-  // Caso a rota não exista, pode criar uma rota de fallback (opcional)
-  // { path: '**', redirectTo: '/motorista/inicio' }
+  // Rotas do Administrador
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    data: { expectedRole: 'ADMIN' },
+    children: [
+      { path: 'inicio', component: AdminInicioComponent },
+      { path: 'veiculos', component: VeiculosComponent },
+      { path: 'motoristas', component: MotoristasComponent },
+      { path: 'registrar-abastecimento', component: RegistrarAbastecimentoComponent },
+      { path: 'registrar-manutencao', component: RegistrarManutencaoComponent },
+      { path: 'agendar-viagem', component: AgendarViagemComponent },
+      { path: '', redirectTo: 'inicio', pathMatch: 'full' }
+    ]
+  },
+
+  { path: '**', redirectTo: '/login' }
 ];
