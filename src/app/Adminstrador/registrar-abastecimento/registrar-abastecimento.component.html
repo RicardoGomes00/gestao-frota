@@ -47,7 +47,7 @@
       <select [(ngModel)]="novoRegistro.motoristaId">
         <option [ngValue]="null" disabled>Selecione um motorista</option>
         <option *ngFor="let m of motoristasDisponiveis" [ngValue]="m.id">
-          {{ m.nome }}
+          {{ m.nomeCompleto }}
         </option>
       </select>
     </label>
@@ -65,7 +65,7 @@
       <p><strong>Veículo:</strong> {{ registro.veiculo?.modelo }} ({{ registro.veiculo?.placa }})</p>
       <p><strong>Data:</strong> {{ registro.data | date:'dd/MM/yyyy' }}</p>
       <p><strong>Valor:</strong> {{ registro.valor | currency:'BRL' }}</p>
-      <p><strong>Motorista:</strong> {{ registro.motorista?.nome }}</p>
+      <p><strong>Motorista:</strong> {{ registro.motorista?.nomeCompleto }}</p>
       <p><strong>KM no Abastecimento:</strong> {{ registro.quilometragem | number }}</p>
     </div>
   </div>

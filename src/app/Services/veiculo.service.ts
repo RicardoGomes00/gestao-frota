@@ -24,7 +24,8 @@ export class VeiculoService {
     return this.http.put<Veiculo>(`${this.apiUrl}/${id}`, veiculo);
   }
 
-  atualizarStatus(id: number, status: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}`, { status });
+  atualizarStatus(id: number, novoStatus: string): Observable<any> {
+    const payload = { status: novoStatus };
+    return this.http.patch(`${this.apiUrl}/${id}/status`, payload);
   }
 }

@@ -59,8 +59,8 @@ export class RegistrarAbastecimentoComponent implements OnInit {
     */
     // Lógica estática
     this.abastecimentos = [
-      { id: 1, veiculoId: 1, motoristaId: 2, data: '2025-06-24', tipoCombustivel: 'Gasolina', valor: 250.50, quilometragem: 20500, veiculo: { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: '', ano: 0, quilometragem: 0, status: 'Disponível' }, motorista: { id: 2, nome: 'Carlos de Souza', cpf: '', cnh: '', validadeCnh: '', telefone: '', email: '', ativo: true, perfil: 'MOTORISTA', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' } },
-      { id: 2, veiculoId: 2, motoristaId: 2, data: '2025-06-20', tipoCombustivel: 'Diesel', valor: 350.00, quilometragem: 50200, veiculo: { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: '', ano: 0, quilometragem: 0, status: 'Disponível' }, motorista: { id: 2, nome: 'Carlos de Souza', cpf: '', cnh: '', validadeCnh: '', telefone: '', email: '', ativo: true, perfil: 'MOTORISTA', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' } }
+      { id: 1, veiculoId: 1, motoristaId: 2, data: '2025-06-24', tipoCombustivel: 'Gasolina', valor: 250.50, quilometragem: 20500, veiculo: { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' }, motorista: { id: 2, nomeCompleto: 'Carlos de Souza', cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', ativo: true, perfil: 'MOTORISTA', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' } },
+      { id: 2, veiculoId: 2, motoristaId: 2, data: '2025-06-20', tipoCombustivel: 'Diesel', valor: 350.00, quilometragem: 50200, veiculo: { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' }, motorista: { id: 2, nomeCompleto: 'Carlos de Souza', cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', ativo: true, perfil: 'MOTORISTA', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' } }
     ];
   }
 
@@ -73,8 +73,8 @@ export class RegistrarAbastecimentoComponent implements OnInit {
     */
     // Lógica estática
     this.veiculosDisponiveis = [
-      { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: 'Picape', ano: 2021, quilometragem: 20000, status: 'Disponível' },
-      { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: 'Picape', ano: 2019, quilometragem: 50000, status: 'Em Manutenção' },
+      { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: 'Picape', ano: 2021, quilometragemAtual: 20000, status: 'Disponível' },
+      { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: 'Picape', ano: 2019, quilometragemAtual: 50000, status: 'Em Manutenção' },
     ];
   }
 
@@ -87,8 +87,8 @@ export class RegistrarAbastecimentoComponent implements OnInit {
     */
     // Lógica estática
     this.motoristasDisponiveis = [
-      { id: 1, nome: 'Admin Principal', perfil: 'ADMIN', ativo: true, cpf: '', cnh: '', validadeCnh: '', telefone: '', email: '', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' },
-      { id: 2, nome: 'Carlos de Souza', perfil: 'MOTORISTA', ativo: true, cpf: '', cnh: '', validadeCnh: '', telefone: '', email: '', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' },
+      { id: 1, nomeCompleto: 'Admin Principal', perfil: 'ADMIN', ativo: true, cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' },
+      { id: 2, nomeCompleto: 'Carlos de Souza', perfil: 'MOTORISTA', ativo: true, cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' },
     ];
   }
 

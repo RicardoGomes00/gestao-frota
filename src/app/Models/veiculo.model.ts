@@ -4,6 +4,6 @@ export interface Veiculo {
   modelo: string;
   tipo: string;
   ano: number;
-  quilometragem: number;
+  quilometragemAtual: number;
   status: 'Disponível' | 'Inativo' | 'Em Manutenção';
 }

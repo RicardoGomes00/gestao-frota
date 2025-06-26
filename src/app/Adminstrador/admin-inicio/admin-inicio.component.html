@@ -1,12 +1,7 @@
 <div class="container">
   <h2>Painel de Controle de Viagens</h2>
 
-  <!-- Card de Filtros -->
   <div class="filtros card">
-    <!-- 
-      Adicionamos (input) e (change) para chamar a função de filtro
-      sempre que o valor de um campo for alterado.
-    -->
     <label>
       Motorista:
       <input [(ngModel)]="filtroMotorista" (input)="aplicarFiltros()" placeholder="Filtrar por nome" />
@@ -15,7 +10,7 @@
       Status:
       <select [(ngModel)]="filtroStatus" (change)="aplicarFiltros()">
         <option value="">Todos</option>
-        <option value="AGENDADO">Agendado</option> <!-- Status atualizado para corresponder ao modelo -->
+        <option value="AGENDADO">Agendado</option>
         <option value="EM_USO">Em Uso</option>
         <option value="FINALIZADO">Finalizado</option>
       </select>
@@ -30,36 +25,22 @@
     </label>
   </div>
 
-  <!-- Lista de Agendamentos -->
   <h3>Todos os Agendamentos</h3>
   <p *ngIf="isLoading">Carregando agendamentos...</p>
+  <p *ngIf="error" class="error-message">{{ error }}</p>
 
-  <div *ngIf="!isLoading">
-    <!-- Mensagem para quando não houver resultados -->
+  <div *ngIf="!isLoading && !error">
     <div *ngIf="agendamentosFiltrados.length === 0" class="card">
         <p>Nenhum agendamento encontrado com os filtros aplicados.</p>
     </div>
 
-    <!-- 
-      ALTERAÇÃO IMPORTANTE: O loop agora itera sobre 'agendamentosFiltrados',
-      uma lista pré-filtrada no TypeScript, o que é muito mais eficiente.
-    -->
     <div *ngFor="let viagem of agendamentosFiltrados" class="card">
-      <!-- 
-        As propriedades foram atualizadas para usar os objetos aninhados
-        do modelo 'Viagem'.
-      -->
-      <p><strong>Motorista:</strong> {{ viagem.motorista.nomeCompleto }}</p>
-      <p><strong>Veículo:</strong> {{ viagem.veiculo.modelo }} ({{ viagem.veiculo.placa }})</p>
+      <p><strong>Motorista:</strong> {{ viagem.motorista?.nomeCompleto }}</p>
+      <p><strong>Veículo:</strong> {{ viagem.veiculo?.modelo }} ({{ viagem.veiculo?.placa }})</p>
       <p><strong>Destino:</strong> {{ viagem.destino }}</p>
       <p><strong>Data/Hora Saída:</strong> {{ viagem.dataHoraSaida | date:'dd/MM/yyyy HH:mm' }}</p>
-      <!-- Usamos [ngClass] para aplicar uma cor diferente para cada status -->
-      <p><strong>Status:</strong> <span class="status" [ngClass]="viagem.status">{{ viagem.status.replace('_', ' ') }}</span></p>
+      <p><strong>Status:</strong> <span class="status" [ngClass]="viagem.status">{{ viagem.status?.replace('_', ' ') }}</span></p>
 
-      <!-- 
-        O botão agora navega para a rota correta.
-        Ele só aparece se o status for um dos esperados.
-      -->
       <button *ngIf="viagem.status === 'AGENDADO' || viagem.status === 'EM_USO' || viagem.status === 'FINALIZADO'" (click)="acaoBotao(viagem)" class="btn-acao">
         {{ getNomeBotao(viagem.status) }}
       </button>

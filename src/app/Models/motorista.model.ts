@@ -1,20 +1,21 @@
 export interface Motorista {
   id: number;
-  nome: string;
-  cpf: string;
-  cnh: string;
-  validadeCnh: string;
-  telefone: string;
-  email: string;
   ativo: boolean;
+  
+  email: string;
   perfil: 'MOTORISTA' | 'ADMIN';
-  senha?: string;
-
-  // Campos de endereço
+  nomeCompleto: string; 
+  cpf: string;
+  cnhNumero: string; 
+  cnhValidade: string; 
+  telefone: string;
+  
   cep: string;
   logradouro: string;
   numero: string; 
   bairro: string;
   cidade: string;
   uf: string;
+  
+  senha?: string;
 }

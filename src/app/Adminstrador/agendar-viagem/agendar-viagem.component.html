@@ -20,7 +20,7 @@
             <select [(ngModel)]="dadosFormulario.motoristaId">
               <option [ngValue]="null" disabled>Selecione um motorista</option>
               <option *ngFor="let m of motoristasDisponiveis" [ngValue]="m.id">
-                {{ m.nome }}
+                {{ m.nomeCompleto }}
               </option>
             </select>
         </label>
@@ -47,8 +47,9 @@
 
   <h3>Próximas Viagens e em Andamento</h3>
   <p *ngIf="isLoading">Carregando viagens...</p>
+  <p *ngIf="error" class="error-message">{{ error }}</p>
 
-  <div *ngIf="!isLoading">
+  <div *ngIf="!isLoading && !error">
     <div *ngIf="viagens.length === 0" class="card">
         <p>Nenhuma viagem agendada ou em uso no momento.</p>
     </div>
@@ -56,8 +57,9 @@
       <p><strong>Destino:</strong> {{ viagem.destino }}</p>
       <p><strong>Motorista:</strong> {{ viagem.motorista?.nomeCompleto }}</p>
       <p><strong>Veículo:</strong> {{ viagem.veiculo?.modelo }} ({{ viagem.veiculo?.placa }})</p>
+      <!-- CORREÇÃO: A propriedade no objeto de exibição também precisa ser corrigida -->
       <p><strong>Saída:</strong> {{ viagem.dataHoraSaida | date:'dd/MM/yyyy HH:mm' }}</p>
-      <p><strong>Status:</strong> <span [ngClass]="viagem.status">{{ viagem.status }}</span></p>
+      <p><strong>Status:</strong> <span class="status" [ngClass]="viagem.status">{{ viagem.status?.replace('_', ' ') }}</span></p>
     </div>
   </div>
 </div>

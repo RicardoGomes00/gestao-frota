@@ -21,11 +21,6 @@ export class AgendarViagemComponent implements OnInit {
   veiculosDisponiveis: Veiculo[] = [];
   motoristasDisponiveis: Motorista[] = [];
   
-  // ==================================================================
-  //                      MUDANÇA PRINCIPAL AQUI
-  // ==================================================================
-  // 1. Criamos um objeto SEPARADO para o formulário.
-  // Ele pode ter a estrutura que quisermos, incluindo veiculoId e motoristaId.
   dadosFormulario = {
     veiculoId: null as number | null,
     motoristaId: null as number | null,
@@ -33,9 +28,9 @@ export class AgendarViagemComponent implements OnInit {
     destino: '',
     justificativa: ''
   };
-  // ==================================================================
 
   isLoading = false;
+  error: string | null = null;
 
   constructor(
     private viagemService: ViagemService,
@@ -43,13 +38,56 @@ export class AgendarViagemComponent implements OnInit {
     private motoristaService: MotoristaService
   ) {}
 
-  ngOnInit() { this.carregarDadosIniciais(); }
+  ngOnInit() {
+    this.carregarDadosIniciais();
+  }
 
-  // Os métodos de carregamento de dados não mudam
-  carregarDadosIniciais(): void { /* ... */ }
-  carregarViagens(): void { /* ... */ }
-  carregarVeiculos(): void { /* ... */ }
-  carregarMotoristas(): void { /* ... */ }
+  carregarDadosIniciais(): void {
+    this.isLoading = true;
+    this.error = null;
+
+    this.carregarViagens();
+    this.carregarVeiculos();
+    this.carregarMotoristas();
+
+    this.isLoading = false;
+  }
+  
+  carregarViagens(): void {
+    this.viagemService.buscarTodasAsViagens().subscribe({
+        next: (data) => {
+            this.viagens = data
+                .filter(v => v.status !== 'FINALIZADO')
+                .sort((a, b) => new Date(a.dataHoraSaida).getTime() - new Date(b.dataHoraSaida).getTime());
+        },
+        error: (err) => {
+            this.error = 'Falha ao carregar agendamentos.';
+            console.error(err);
+        }
+    });
+  }
+
+  carregarVeiculos(): void {
+    this.veiculoService.buscarVeiculos().subscribe({
+      next: (data) => {
+        this.veiculosDisponiveis = data.filter(v => v.status === 'Disponível');
+      },
+      error: (err) => {
+          console.error('Falha ao carregar veículos.', err);
+      }
+    });
+  }
+
+  carregarMotoristas(): void {
+    this.motoristaService.buscarMotoristas().subscribe({
+      next: (data) => {
+        this.motoristasDisponiveis = data.filter(m => m.ativo && m.perfil?.toUpperCase() === 'MOTORISTA');
+      },
+      error: (err) => {
+          console.error('Falha ao carregar motoristas.', err);
+      }
+    });
+  }
 
   salvarAgendamento(): void {
     if (!this.dadosFormulario.veiculoId || !this.dadosFormulario.motoristaId || !this.dadosFormulario.dataHoraSaida || !this.dadosFormulario.destino) {
@@ -57,40 +95,27 @@ export class AgendarViagemComponent implements OnInit {
       return;
     }
 
-    // ==================================================================
-    //                      CORREÇÃO APLICADA AQUI
-    // ==================================================================
-    const agendamentoParaApi: Partial<Viagem> = {
-      destino: this.dadosFormulario.destino,
-      dataHoraSaida: this.dadosFormulario.dataHoraSaida,
-      justificativa: this.dadosFormulario.justificativa,
-      
-      // Ao usar 'as any', dizemos ao TypeScript para aceitar o objeto
-      // mesmo que ele contenha apenas o 'id'.
-      veiculo: { id: this.dadosFormulario.veiculoId } as any,
-      motorista: { id: this.dadosFormulario.motoristaId } as any,
-    };
-    // ==================================================================
-
-
-    // Lógica de integração comentada (agora usa o objeto transformado corretamente)
-    /*
-    this.viagemService.agendarNovaViagem(agendamentoParaApi).subscribe({
+    this.viagemService.agendarNovaViagem(this.dadosFormulario).subscribe({
         next: () => {
-          alert('Viagem agendada com sucesso no sistema!');
+          alert('Viagem agendada com sucesso!');
           this.limparFormulario();
-          this.carregarViagens();
+          this.carregarViagens(); 
         },
         error: (err) => {
-          alert('Erro ao agendar a viagem.');
-          console.error(err);
+            let mensagemErro = 'Ocorreu um erro desconhecido.';
+            if (err.error) {
+              if (typeof err.error === 'object' && err.error.message) {
+                mensagemErro = err.error.message;
+              } else if (typeof err.error === 'string') {
+                mensagemErro = err.error;
+              }
+            } else if (err.message) {
+              mensagemErro = err.message;
+            }
+            alert(`Erro ao agendar a viagem: ${mensagemErro}`);
+            console.error('Objeto de erro completo:', err);
         }
     });
-    */
-
-    // Lógica estática
-    alert('Viagem agendada (estático)!');
-    this.limparFormulario();
   }
   
   limparFormulario(): void {

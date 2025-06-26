@@ -4,20 +4,22 @@
   <div *ngIf="modoFormulario" class="card filtros">
     <h3>{{ usuarioEmEdicao.id ? 'Editando Usuário' : 'Novo Usuário' }}</h3>
     
-    <label>Nome completo*:<input [(ngModel)]="usuarioEmEdicao.nome" /></label>
-    <label>CPF*:<input [(ngModel)]="usuarioEmEdicao.cpf" /></label>
-    <label>CNH*:<input [(ngModel)]="usuarioEmEdicao.cnh" /></label>
-    <label>Validade CNH*:<input type="date" [(ngModel)]="usuarioEmEdicao.validadeCnh" /></label>
-    <label>Telefone:<input [(ngModel)]="usuarioEmEdicao.telefone" /></label>
+    <label>Nome completo*:<input [(ngModel)]="usuarioEmEdicao.nomeCompleto" /></label>    
+    <label>CPF*:<input [(ngModel)]="usuarioEmEdicao.cpf" mask="000.000.000-00" /></label>    
+    <label>CNH*:<input [(ngModel)]="usuarioEmEdicao.cnhNumero" mask="00000000000" /></label>    
+    <label>Validade CNH*:<input type="date" [(ngModel)]="usuarioEmEdicao.cnhValidade" /></label>    
+    <label>Telefone:<input [(ngModel)]="usuarioEmEdicao.telefone" mask="(00) 00000-0000" /></label>    
     <label>E-mail*:<input type="email" [(ngModel)]="usuarioEmEdicao.email" /></label>
-    <label>Senha*:<input type="password" [(ngModel)]="usuarioEmEdicao.senha" /></label>
+    <label>Senha*:<input type="password" [(ngModel)]="usuarioEmEdicao.senha" placeholder="{{ usuarioEmEdicao.id ? 'Deixe em branco para não alterar' : '' }}" /></label>
     <label>Perfil*:<select [(ngModel)]="usuarioEmEdicao.perfil">
         <option [ngValue]="null" disabled>Selecione um perfil</option>
         <option value="MOTORISTA">Motorista</option>
         <option value="ADMIN">Administrador</option>
       </select>
     </label>
-    <label>CEP*:<input [(ngModel)]="usuarioEmEdicao.cep" (blur)="consultarCep()" placeholder="Apenas números" /></label>
+    
+    <label>CEP*:<input [(ngModel)]="usuarioEmEdicao.cep" (blur)="consultarCep()" placeholder="Apenas números" mask="00000-000" /></label>
+    
     <label>Logradouro:<input [(ngModel)]="usuarioEmEdicao.logradouro" [readOnly]="true" /></label>
     <label>Número*:<input [(ngModel)]="usuarioEmEdicao.numero" /></label>
     <label>Bairro:<input [(ngModel)]="usuarioEmEdicao.bairro" [readOnly]="true" /></label>
@@ -39,13 +41,15 @@
   </div>
 
   <h3>Usuários Cadastrados</h3>
+  <p *ngIf="isLoading">Carregando usuários...</p>
+  <p *ngIf="error" class="error-message">{{ error }}</p>
 
   <div *ngIf="!isLoading && !error">
     <div *ngFor="let m of motoristas" class="card">
-      <p><strong>Nome:</strong> {{ m.nome }} <span *ngIf="!m.ativo" style="color:#dc3545; font-weight: bold;">(Inativo)</span></p>
+      <p><strong>Nome:</strong> {{ m.nomeCompleto }} <span *ngIf="!m.ativo" style="color:#dc3545; font-weight: bold;">(Inativo)</span></p>
       <p><strong>Perfil:</strong> {{ m.perfil }}</p>
       <p><strong>Email:</strong> {{ m.email }}</p>
-      <p><strong>Telefone:</strong> {{ m.telefone }}</p>
+      <p><strong>Telefone:</strong> {{ m.telefone | mask: '(00) 00000-0000' }}</p> 
       
       <div style="margin-top: 1rem;">
         <button class="btn-acao" (click)="iniciarEdicao(m)">Editar</button>

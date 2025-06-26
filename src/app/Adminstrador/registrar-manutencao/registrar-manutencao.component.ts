@@ -50,8 +50,8 @@ export class RegistrarManutencaoComponent implements OnInit {
     });
     */
     // Dados estáticos
-    const mockVeiculo1 = { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: '', ano: 0, quilometragem: 0, status: 'Disponível' as const };
-    const mockVeiculo2 = { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: '', ano: 0, quilometragem: 0, status: 'Disponível' as const };
+    const mockVeiculo1 = { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' as const };
+    const mockVeiculo2 = { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' as const };
     this.manutencoes = [
       { id: 1, veiculoId: 1, data: '2025-06-15', tipo: 'Preventiva', descricao: 'Troca de óleo e filtros', valor: 450.00, quilometragem: 20000, veiculo: mockVeiculo1 },
       { id: 2, veiculoId: 2, data: '2025-05-30', tipo: 'Corretiva', descricao: 'Reparo no freio dianteiro', valor: 850.00, quilometragem: 49500, veiculo: mockVeiculo2 }
@@ -67,8 +67,8 @@ export class RegistrarManutencaoComponent implements OnInit {
     */
     // Dados estáticos
     this.veiculosDisponiveis = [
-      { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: 'Picape', ano: 2021, quilometragem: 20000, status: 'Disponível' },
-      { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: 'Picape', ano: 2019, quilometragem: 50000, status: 'Disponível' },
+      { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: 'Picape', ano: 2021, quilometragemAtual: 20000, status: 'Disponível' },
+      { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: 'Picape', ano: 2019, quilometragemAtual: 50000, status: 'Disponível' },
     ];
   }
 

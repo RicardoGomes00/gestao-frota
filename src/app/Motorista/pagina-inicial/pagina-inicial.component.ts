@@ -50,37 +50,7 @@ export class PaginaInicialComponent implements OnInit {
     // Comente ou remova este bloco quando for ativar a integração real.
 
     const mockAgendamentos: Viagem[] = [
-      {
-        id: 1,
-        // Adaptamos os nomes para corresponder à interface 'Viagem'
-        dataHoraSaida: '2025-06-27T08:00:00',
-        veiculo: { id: 101, placa: 'ABC-1234', modelo: 'Ford Ranger' },
-        motorista: { id: 123, nomeCompleto: 'Motorista Logado' },
-        destino: 'São Paulo',
-        justificativa: 'Entrega de material',
-        status: 'AGENDADO'
-      },
-      {
-        id: 2,
-        dataHoraSaida: '2025-06-25T10:00:00',
-        veiculo: { id: 102, placa: 'DEF-5678', modelo: 'Fiat Toro' },
-        motorista: { id: 123, nomeCompleto: 'Motorista Logado' },
-        destino: 'Campinas',
-        justificativa: 'Reunião com cliente',
-        status: 'EM_USO',
-        quilometragemInicial: 75000
-      },
-      {
-        id: 3,
-        dataHoraSaida: '2025-06-23T14:00:00',
-        veiculo: { id: 103, placa: 'GHI-9012', modelo: 'Toyota Hilux' },
-        motorista: { id: 123, nomeCompleto: 'Motorista Logado' },
-        destino: 'Santos',
-        justificativa: 'Retirada de equipamento',
-        status: 'FINALIZADO',
-        quilometragemInicial: 74500,
-        quilometragemFinal: 74850
-      }
+      
     ];
     this.agendamentos = mockAgendamentos.sort((a, b) => new Date(b.dataHoraSaida).getTime() - new Date(a.dataHoraSaida).getTime());
     this.isLoading = false;

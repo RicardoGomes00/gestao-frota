@@ -1,14 +1,16 @@
 <div class="container">
   <h2>Cadastro e Gerenciamento de Veículos</h2>
 
+  <!-- Formulário de Criação/Edição -->
   <div *ngIf="modoFormulario" class="card filtros">
     <h3>{{ veiculoEmEdicao.id ? 'Editando Veículo' : 'Novo Veículo' }}</h3>
     
-    <label>Placa*:<input [(ngModel)]="veiculoEmEdicao.placa" /></label>
+    <!-- Máscara de placa Mercosul e ajuste de nomes de campo para 'quilometragemAtual' -->
+    <label>Placa*:<input [(ngModel)]="veiculoEmEdicao.placa" mask="AAA-0A00" /></label>
     <label>Modelo*:<input [(ngModel)]="veiculoEmEdicao.modelo" /></label>
     <label>Tipo*:<input [(ngModel)]="veiculoEmEdicao.tipo" /></label>
     <label>Ano*:<input type="number" [(ngModel)]="veiculoEmEdicao.ano" /></label>
-    <label>Quilometragem*:<input type="number" [(ngModel)]="veiculoEmEdicao.quilometragem" /></label>
+    <label>Quilometragem*:<input type="number" [(ngModel)]="veiculoEmEdicao.quilometragemAtual" /></label>
     <label>Status*:<select [(ngModel)]="veiculoEmEdicao.status">
         <option value="Disponível">Disponível</option>
         <option value="Em Manutenção">Em Manutenção</option>
@@ -22,21 +24,25 @@
     </div>
   </div>
 
+  <!-- Botão para abrir o formulário -->
   <div *ngIf="!modoFormulario" style="margin-bottom: 1.5rem;">
     <button class="btn-acao" (click)="iniciarAdicao()">+ Adicionar Novo Veículo</button>
   </div>
 
 
+  <!-- Lista de Veículos -->
   <h3>Veículos Cadastrados</h3>
   <p *ngIf="isLoading">Carregando veículos...</p>
+  <p *ngIf="error" class="error-message">{{ error }}</p>
 
-  <div *ngIf="!isLoading">
+  <div *ngIf="!isLoading && !error">
     <div *ngFor="let v of veiculos" class="card">
+      <!-- Ajustado para 'quilometragemAtual' -->
       <p><strong>Placa:</strong> {{ v.placa }}</p>
       <p><strong>Modelo:</strong> {{ v.modelo }}</p>
       <p><strong>Tipo:</strong> {{ v.tipo }}</p>
       <p><strong>Ano:</strong> {{ v.ano }}</p>
-      <p><strong>Quilometragem Atual:</strong> {{ v.quilometragem | number }}</p>
+      <p><strong>Quilometragem Atual:</strong> {{ v.quilometragemAtual | number }}</p>
       <p><strong>Status:</strong> {{ v.status }}</p>
 
       <div style="margin-top: 1rem;">

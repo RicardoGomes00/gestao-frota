@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
-// 1. IMPORTE O SERVIÇO E O MODELO
 import { VeiculoService } from '../../Services/veiculo.service';
 import { Veiculo } from '../../Models/veiculo.model';
 
 @Component({
   selector: 'app-veiculos',
   standalone: true,
-  imports: [ FormsModule, CommonModule ],
+  imports: [ FormsModule, CommonModule, NgxMaskDirective ],
+  providers: [provideNgxMask()], 
   templateUrl: './veiculos.component.html',
   styleUrls: ['./veiculos.component.css'],
 })
 export class VeiculosComponent implements OnInit {
   veiculos: Veiculo[] = [];
   isLoading = false;
+  error: string | null = null;
 
-  // Propriedades para controlar o formulário
-  modoFormulario = false; // Controla a visibilidade do formulário
-  veiculoEmEdicao: Partial<Veiculo> = {}; // Guarda os dados do form
+  modoFormulario = false;
+  veiculoEmEdicao: Partial<Veiculo> = {};
 
-  // 2. INJETE O SERVIÇO
   constructor(private veiculoService: VeiculoService) { }
 
   ngOnInit() {
@@ -30,33 +30,31 @@ export class VeiculosComponent implements OnInit {
 
   carregarVeiculos(): void {
     this.isLoading = true;
-    // Lógica de integração comentada
-    /*
-    this.veiculoService.buscarVeiculos().subscribe(data => {
-      this.veiculos = data;
-      this.isLoading = false;
-    });
-    */
+    this.error = null;
 
-    // Dados estáticos
-    this.veiculos = [
-      { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: 'Picape', ano: 2021, quilometragem: 20000, status: 'Disponível' },
-      { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: 'Picape', ano: 2019, quilometragem: 50000, status: 'Em Manutenção' },
-      { id: 3, placa: 'GHI-9012', modelo: 'Mercedes Sprinter', tipo: 'Van', ano: 2022, quilometragem: 15000, status: 'Inativo' },
-    ];
-    this.isLoading = false;
+    this.veiculoService.buscarVeiculos().subscribe({
+      next: (data) => {
+        this.veiculos = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = "Falha ao carregar a lista de veículos.";
+        this.isLoading = false;
+        console.error(err);
+      }
+    });
   }
 
-  // MÉTODOS PARA CONTROLAR O FORMULÁRIO
   iniciarAdicao(): void {
-    this.veiculoEmEdicao = { status: 'Disponível' }; // Limpa o objeto e define um status padrão
-    this.modoFormulario = true; // Exibe o formulário
+    this.veiculoEmEdicao = { status: 'Disponível' };
+    this.modoFormulario = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
   }
 
   iniciarEdicao(veiculo: Veiculo): void {
-    // Cria uma cópia do objeto para edição, para não alterar a lista diretamente
     this.veiculoEmEdicao = { ...veiculo };
     this.modoFormulario = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
   }
 
   cancelarEdicao(): void {
@@ -71,51 +69,47 @@ export class VeiculosComponent implements OnInit {
     }
 
     if (this.veiculoEmEdicao.id) {
-      // --- LÓGICA DE ATUALIZAÇÃO ---
-      // Lógica de integração comentada
-      /*
-      this.veiculoService.atualizarVeiculo(this.veiculoEmEdicao.id, this.veiculoEmEdicao).subscribe(() => {
-        this.carregarVeiculos();
+      this.veiculoService.atualizarVeiculo(this.veiculoEmEdicao.id, this.veiculoEmEdicao).subscribe({
+        next: () => {
+          alert('Veículo atualizado com sucesso!');
+          this.cancelarEdicao();
+          this.carregarVeiculos();
+        },
+        error: (err) => {
+          alert('Erro ao atualizar veículo.');
+          console.error(err);
+        }
       });
-      */
-      
-      // Lógica estática
-      const index = this.veiculos.findIndex(v => v.id === this.veiculoEmEdicao.id);
-      if (index > -1) {
-        this.veiculos[index] = this.veiculoEmEdicao as Veiculo;
-      }
-      alert('Veículo atualizado (estático)!');
-
     } else {
-      // --- LÓGICA DE CRIAÇÃO ---
-      // Lógica de integração comentada
-      /*
-      this.veiculoService.adicionarVeiculo(this.veiculoEmEdicao).subscribe(() => {
-        this.carregarVeiculos();
+      this.veiculoService.adicionarVeiculo(this.veiculoEmEdicao).subscribe({
+        next: () => {
+          alert('Veículo adicionado com sucesso!');
+          this.cancelarEdicao();
+          this.carregarVeiculos();
+        },
+        error: (err) => {
+          alert('Erro ao adicionar veículo. Verifique se a placa já existe.');
+          console.error(err);
+        }
       });
-      */
-
-      // Lógica estática
-      this.veiculoEmEdicao.id = Date.now(); // Simula um novo ID
-      this.veiculos.push(this.veiculoEmEdicao as Veiculo);
-      alert('Veículo adicionado (estático)!');
     }
-
-    this.cancelarEdicao(); // Esconde o formulário após salvar
   }
 
   alternarStatus(veiculo: Veiculo): void {
     const novoStatus = veiculo.status === 'Inativo' ? 'Disponível' : 'Inativo';
 
-    // Lógica de integração comentada
-    /*
-    this.veiculoService.atualizarStatus(veiculo.id, novoStatus).subscribe(() => {
-      veiculo.status = novoStatus;
-    });
-    */
-
-    // Lógica estática
-    veiculo.status = novoStatus;
-    alert(`Status do veículo ${veiculo.placa} alterado para ${novoStatus} (estático)!`);
+    if (confirm(`Tem certeza que deseja alterar o status do veículo ${veiculo.placa} para "${novoStatus}"?`)) {
+      this.veiculoService.atualizarStatus(veiculo.id, novoStatus).subscribe({
+        next: () => {
+          alert('Status alterado com sucesso!');
+          
+          veiculo.status = novoStatus; 
+        },
+        error: (err) => {
+          alert('Erro ao alterar o status do veículo.');
+          console.error(err);
+        }
+      });
+    }
   }
 }
