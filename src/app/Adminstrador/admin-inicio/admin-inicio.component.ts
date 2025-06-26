@@ -37,7 +37,7 @@ export class AdminInicioComponent implements OnInit {
     
     this.viagemService.buscarTodasAsViagens().subscribe({
       next: (data) => {
-        this.agendamentos = data.sort((a, b) => new Date(b.dataHoraSaida).getTime() - new Date(a.dataHoraSaida).getTime());
+        this.agendamentos = data.sort((a, b) => new Date(b.dataSaidaAgendada).getTime() - new Date(a.dataSaidaAgendada).getTime());
         this.aplicarFiltros(); 
         this.isLoading = false;
       },
@@ -61,12 +61,12 @@ export class AdminInicioComponent implements OnInit {
       resultado = resultado.filter(v => v.status === this.filtroStatus);
     }
     if (this.filtroDataInicio) {
-      resultado = resultado.filter(v => new Date(v.dataHoraSaida) >= new Date(this.filtroDataInicio!));
+      resultado = resultado.filter(v => new Date(v.dataSaidaAgendada) >= new Date(this.filtroDataInicio!));
     }
     if (this.filtroDataFim) {
       const dataFim = new Date(this.filtroDataFim!);
       dataFim.setDate(dataFim.getDate() + 1); 
-      resultado = resultado.filter(v => new Date(v.dataHoraSaida) < dataFim);
+      resultado = resultado.filter(v => new Date(v.dataSaidaAgendada) < dataFim);
     }
     
     this.agendamentosFiltrados = resultado;

@@ -1,51 +1,56 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+interface LoginResponse {
+  usuarioId: number;
+  nome: string;
+  email: string;
+  perfil: 'admin' | 'motorista';
+  token: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private userProfile: 'MOTORISTA' | 'ADMIN' | null = null;
+  private apiUrl = `${environment.apiUrl}/auth`;
 
-  // Em uma aplicação real, você injetaria o HttpClient para falar com o backend
-  constructor(private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
-  // Lógica de login estática (como fizemos antes)
-  login(email: string, senha: string): boolean {
-    if (email === 'motorista@frota.com' && senha === '123') {
-      this.userProfile = 'MOTORISTA';
-      // Salva o perfil no sessionStorage para persistir entre reloads da página
-      sessionStorage.setItem('userProfile', this.userProfile);
-      this.router.navigate(['/motorista/inicio']);
-      return true;
-    }
-
-    if (email === 'admin@frota.com' && senha === 'admin123') {
-      this.userProfile = 'ADMIN';
-      sessionStorage.setItem('userProfile', this.userProfile);
-      this.router.navigate(['/admin/inicio']);
-      return true;
-    }
-
-    return false;
+  login(credenciais: { email: string, password: string }): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credenciais).pipe(
+      tap(response => {
+        sessionStorage.setItem('authToken', response.token);
+        sessionStorage.setItem('userProfile', response.perfil.toUpperCase());
+        sessionStorage.setItem('userName', response.nome);
+        sessionStorage.setItem('usuarioId', response.usuarioId.toString());
+      })
+    );
   }
 
   logout(): void {
-    this.userProfile = null;
-    sessionStorage.removeItem('userProfile');
+    sessionStorage.clear();
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    // Verifica se o perfil existe na memória ou no sessionStorage
-    return !!this.getUserProfile();
+    return !!sessionStorage.getItem('authToken');
   }
 
-  getUserProfile(): 'MOTORISTA' | 'ADMIN' | null {
-    // Prioriza o estado em memória, mas recupera do sessionStorage se a página for recarregada
-    if (!this.userProfile) {
-      this.userProfile = sessionStorage.getItem('userProfile') as 'MOTORISTA' | 'ADMIN' | null;
-    }
-    return this.userProfile;
+  getUserProfile(): 'ADMIN' | 'MOTORISTA' | null {
+    return sessionStorage.getItem('userProfile') as 'ADMIN' | 'MOTORISTA' | null;
+  }
+  
+  getUserName(): string | null {
+    return sessionStorage.getItem('userName');
+  }
+
+
+  getUsuarioId(): number | null {
+    const id = sessionStorage.getItem('usuarioId');
+    return id ? parseInt(id, 10) : null;
   }
 }

@@ -38,7 +38,7 @@
       <p><strong>Motorista:</strong> {{ viagem.motorista?.nomeCompleto }}</p>
       <p><strong>Veículo:</strong> {{ viagem.veiculo?.modelo }} ({{ viagem.veiculo?.placa }})</p>
       <p><strong>Destino:</strong> {{ viagem.destino }}</p>
-      <p><strong>Data/Hora Saída:</strong> {{ viagem.dataHoraSaida | date:'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>Data/Hora Saída:</strong> {{ viagem.dataSaidaAgendada | date:'dd/MM/yyyy HH:mm' }}</p>
       <p><strong>Status:</strong> <span class="status" [ngClass]="viagem.status">{{ viagem.status?.replace('_', ' ') }}</span></p>
 
       <button *ngIf="viagem.status === 'AGENDADO' || viagem.status === 'EM_USO' || viagem.status === 'FINALIZADO'" (click)="acaoBotao(viagem)" class="btn-acao">

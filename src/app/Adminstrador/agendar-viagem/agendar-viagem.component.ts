@@ -24,7 +24,7 @@ export class AgendarViagemComponent implements OnInit {
   dadosFormulario = {
     veiculoId: null as number | null,
     motoristaId: null as number | null,
-    dataHoraSaida: '',
+    dataSaidaAgendada: '', 
     destino: '',
     justificativa: ''
   };
@@ -55,15 +55,12 @@ export class AgendarViagemComponent implements OnInit {
   
   carregarViagens(): void {
     this.viagemService.buscarTodasAsViagens().subscribe({
-        next: (data) => {
-            this.viagens = data
-                .filter(v => v.status !== 'FINALIZADO')
-                .sort((a, b) => new Date(a.dataHoraSaida).getTime() - new Date(b.dataHoraSaida).getTime());
-        },
-        error: (err) => {
-            this.error = 'Falha ao carregar agendamentos.';
-            console.error(err);
-        }
+      next: (data) => {
+        this.viagens = data
+          .filter(v => v.status !== 'FINALIZADO')
+          .sort((a, b) => new Date(a.dataSaidaAgendada).getTime() - new Date(b.dataSaidaAgendada).getTime());
+      },
+      // ...
     });
   }
 
@@ -90,39 +87,53 @@ export class AgendarViagemComponent implements OnInit {
   }
 
   salvarAgendamento(): void {
-    if (!this.dadosFormulario.veiculoId || !this.dadosFormulario.motoristaId || !this.dadosFormulario.dataHoraSaida || !this.dadosFormulario.destino) {
-      alert('Preencha todos os campos obrigatórios!');
-      return;
-    }
+  const { veiculoId, motoristaId, dataSaidaAgendada, destino } = this.dadosFormulario;
 
-    this.viagemService.agendarNovaViagem(this.dadosFormulario).subscribe({
-        next: () => {
-          alert('Viagem agendada com sucesso!');
-          this.limparFormulario();
-          this.carregarViagens(); 
-        },
-        error: (err) => {
-            let mensagemErro = 'Ocorreu um erro desconhecido.';
-            if (err.error) {
-              if (typeof err.error === 'object' && err.error.message) {
-                mensagemErro = err.error.message;
-              } else if (typeof err.error === 'string') {
-                mensagemErro = err.error;
-              }
-            } else if (err.message) {
-              mensagemErro = err.message;
-            }
-            alert(`Erro ao agendar a viagem: ${mensagemErro}`);
-            console.error('Objeto de erro completo:', err);
-        }
-    });
+  if (!veiculoId || !motoristaId || !dataSaidaAgendada || !destino.trim()) {
+    alert('Preencha todos os campos obrigatórios!');
+    return;
   }
+
+  // Garante que o valor tenha segundos (adiciona ":00" se só tiver hora:minuto)
+  const [date, time] = dataSaidaAgendada.split('T');
+  const timeWithSeconds = time.length === 5 ? time + ':00' : time; // "19:10" → "19:10:00"
+  const dataFormatada = `${date}T${timeWithSeconds}`;
+
+  const payload = {
+    ...this.dadosFormulario,
+    dataSaidaAgendada: dataFormatada
+  };
+
+  console.log('Enviando agendamento:', payload);
+
+  this.viagemService.agendarNovaViagem(payload).subscribe({
+    next: () => {
+      alert('Viagem agendada com sucesso!');
+      this.limparFormulario();
+      this.carregarViagens(); 
+    },
+    error: (err) => {
+      let mensagemErro = 'Ocorreu um erro desconhecido.';
+      if (err.error) {
+        if (typeof err.error === 'object' && err.error.message) {
+          mensagemErro = err.error.message;
+        } else if (typeof err.error === 'string') {
+          mensagemErro = err.error;
+        }
+      } else if (err.message) {
+        mensagemErro = err.message;
+      }
+      alert(`Erro ao agendar a viagem: ${mensagemErro}`);
+      console.error('Objeto de erro completo:', err);
+    }
+  });
+}
   
   limparFormulario(): void {
     this.dadosFormulario = {
       veiculoId: null,
       motoristaId: null,
-      dataHoraSaida: '',
+      dataSaidaAgendada: '', 
       destino: '',
       justificativa: ''
     };

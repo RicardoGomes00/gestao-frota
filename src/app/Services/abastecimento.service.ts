@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Abastecimento } from '../Models/abastecimento.model';
+import { AbastecimentoCreateDTO } from '../Models/abastecimento-create.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +11,13 @@ import { Abastecimento } from '../Models/abastecimento.model';
 export class AbastecimentoService {
   private apiUrl = `${environment.apiUrl}/admin/abastecimentos`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  /** Busca a lista de todos os registros de abastecimento. */
   buscarAbastecimentos(): Observable<Abastecimento[]> {
     return this.http.get<Abastecimento[]>(this.apiUrl);
   }
 
-  /** Adiciona um novo registro de abastecimento. */
-  registrarAbastecimento(abastecimento: Partial<Abastecimento>): Observable<Abastecimento> {
-    return this.http.post<Abastecimento>(this.apiUrl, abastecimento);
+  registrarAbastecimento(dados: AbastecimentoCreateDTO): Observable<Abastecimento> {
+    return this.http.post<Abastecimento>(this.apiUrl, dados);
   }
 }

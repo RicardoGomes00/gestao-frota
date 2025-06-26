@@ -1,13 +1,11 @@
 <div class="container">
   <h2>Registro de Abastecimentos</h2>
 
-  <!-- Formulário de Cadastro -->
-  <div class="card filtros"> <!-- Usando a classe 'filtros' para o layout lado a lado -->
+  <div class="card filtros">
     <h3>Novo Registro</h3>
     
     <label>
       Veículo*:
-      <!-- Usando <select> em vez de <input> -->
       <select [(ngModel)]="novoRegistro.veiculoId">
         <option [ngValue]="null" disabled>Selecione um veículo</option>
         <option *ngFor="let v of veiculosDisponiveis" [ngValue]="v.id">
@@ -18,13 +16,12 @@
 
     <label>
       Data*:
-      <input type="date" [(ngModel)]="novoRegistro.data" />
+      <input type="date" [(ngModel)]="novoRegistro.dataAbastecimento" />
     </label>
     
     <label>
       Tipo de combustível*:
       <select [(ngModel)]="novoRegistro.tipoCombustivel">
-          <option [ngValue]="null" disabled>Selecione</option>
           <option value="Gasolina">Gasolina</option>
           <option value="Etanol">Etanol</option>
           <option value="Diesel">Diesel</option>
@@ -33,17 +30,16 @@
     
     <label>
       Valor (R$)*:
-      <input type="number" [(ngModel)]="novoRegistro.valor" />
+      <input type="number" [(ngModel)]="novoRegistro.valorTotal" placeholder="Ex: 250.50" />
     </label>
     
     <label>
       Quilometragem no momento*:
-      <input type="number" [(ngModel)]="novoRegistro.quilometragem" />
+      <input type="number" [(ngModel)]="novoRegistro.quilometragemNoAbastecimento" placeholder="Ex: 55200" />
     </label>
     
     <label>
       Motorista responsável*:
-      <!-- Usando <select> em vez de <input> -->
       <select [(ngModel)]="novoRegistro.motoristaId">
         <option [ngValue]="null" disabled>Selecione um motorista</option>
         <option *ngFor="let m of motoristasDisponiveis" [ngValue]="m.id">
@@ -56,17 +52,21 @@
   </div>
 
 
-  <!-- Lista de Registros Recentes -->
   <h3>Registros Recentes</h3>
   <p *ngIf="isLoading">Carregando registros...</p>
+  <p *ngIf="error" class="error-message">{{ error }}</p>
 
-  <div *ngIf="!isLoading">
+  <div *ngIf="!isLoading && !error">
+    <div *ngIf="abastecimentos.length === 0" class="card">
+      <p>Nenhum registro de abastecimento encontrado.</p>
+    </div>
+
     <div *ngFor="let registro of abastecimentos" class="card">
       <p><strong>Veículo:</strong> {{ registro.veiculo?.modelo }} ({{ registro.veiculo?.placa }})</p>
-      <p><strong>Data:</strong> {{ registro.data | date:'dd/MM/yyyy' }}</p>
-      <p><strong>Valor:</strong> {{ registro.valor | currency:'BRL' }}</p>
+      <p><strong>Data:</strong> {{ registro.dataAbastecimento | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Valor:</strong> {{ registro.valorTotal | currency:'BRL' }}</p>
       <p><strong>Motorista:</strong> {{ registro.motorista?.nomeCompleto }}</p>
-      <p><strong>KM no Abastecimento:</strong> {{ registro.quilometragem | number }}</p>
+      <p><strong>KM no Abastecimento:</strong> {{ registro.quilometragemNoAbastecimento | number }}</p>
     </div>
   </div>
 </div>

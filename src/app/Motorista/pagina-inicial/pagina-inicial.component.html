@@ -2,16 +2,22 @@
   <h2>Meus Agendamentos</h2>
 
   <p *ngIf="isLoading">Carregando agendamentos...</p>
+  <p *ngIf="error" class="error-message">{{ error }}</p>
 
-  <p *ngIf="error">{{ error }}</p>
+  <div *ngIf="!isLoading && !error">
+    <div *ngIf="agendamentos.length === 0" class="card">
+      <p>Você não possui viagens pendentes ou em andamento.</p>
+    </div>
 
-  <div *ngIf="!isLoading && !error" class="card-container">
     <div *ngFor="let agendamento of agendamentos" class="card">
       
-      <p><strong>Data:</strong> {{ agendamento.dataHoraSaida | date:'dd/MM/yyyy HH:mm' }}</p>
-      <p><strong>Veículo:</strong> {{ agendamento.veiculo.modelo }} ({{ agendamento.veiculo.placa }})</p>
+      <p><strong>Data:</strong> {{ agendamento.dataSaidaAgendada | date:'dd/MM/yyyy HH:mm' }}</p>
+      
+      <p><strong>Veículo:</strong> {{ agendamento.veiculo?.modelo }} ({{ agendamento.veiculo?.placa }})</p>
+      <p><strong>Motorista:</strong> {{ agendamento.motorista?.nomeCompleto }}</p>
+      
       <p><strong>Destino:</strong> {{ agendamento.destino }}</p>
-      <p><strong>Status:</strong> {{ agendamento.status }}</p>
+      <p><strong>Status:</strong> <span class="status" [ngClass]="agendamento.status">{{ agendamento.status?.replace('_', ' ') }}</span></p>
 
       <button *ngIf="agendamento.status === 'AGENDADO'" class="iniciar" (click)="iniciarViagem(agendamento)">
         Iniciar Viagem

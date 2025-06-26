@@ -2,13 +2,11 @@ import { Veiculo } from './veiculo.model';
 
 export interface Manutencao {
   id: number;
-  data: string; // ou Date
-  tipo: 'Preventiva' | 'Corretiva';
-  descricao: string;
-  valor: number;
+  dataInicio: string;
+  dataFim?: string;
+  descricaoServico: string;
+  custo: number;
   quilometragem: number;
-
-  veiculoId: number;
-
+  
   veiculo?: Veiculo;
 }

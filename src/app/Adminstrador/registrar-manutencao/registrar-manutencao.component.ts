@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-// 1. IMPORTE OS SERVIÇOS E MODELOS
 import { ManutencaoService } from '../../Services/manutencao.service';
 import { VeiculoService } from '../../Services/veiculo.service';
 import { Manutencao } from '../../Models/manutencao.model';
@@ -16,79 +15,87 @@ import { Veiculo } from '../../Models/veiculo.model';
   styleUrls: ['./registrar-manutencao.component.css'],
 })
 export class RegistrarManutencaoComponent implements OnInit {
-  // Listas de dados
   manutencoes: Manutencao[] = [];
   veiculosDisponiveis: Veiculo[] = [];
 
-  // Objeto para o formulário
-  novoRegistro: Partial<Manutencao> = { tipo: 'Preventiva' }; // Define um tipo padrão
+  novoRegistro = {
+    veiculoId: null as number | null,
+    dataInicio: '',
+    tipo: 'Preventiva', 
+    descricaoServico: '',
+    custo: null as number | null,
+    quilometragem: null as number | null
+  };
 
   isLoading = false;
+  error: string | null = null;
 
-  // 2. INJETE OS SERVIÇOS
   constructor(
     private manutencaoService: ManutencaoService,
     private veiculoService: VeiculoService
   ) {}
 
   ngOnInit() {
-    this.carregarDados();
+    this.carregarDadosIniciais();
   }
 
-  carregarDados(): void {
+  carregarDadosIniciais(): void {
     this.isLoading = true;
+    this.error = null;
     this.carregarManutencoes();
     this.carregarVeiculos();
     this.isLoading = false;
   }
 
   carregarManutencoes(): void {
-    // Lógica de integração comentada
-    /*
-    this.manutencaoService.buscarManutencoes().subscribe(data => {
-      this.manutencoes = data;
+    this.manutencaoService.buscarManutencoes().subscribe({
+      next: (data) => {
+        this.manutencoes = data.sort((a, b) => new Date(b.dataInicio).getTime() - new Date(a.dataInicio).getTime());
+      },
+      error: (err) => {
+        this.error = "Falha ao carregar registros de manutenção.";
+        console.error(err);
+      }
     });
-    */
-    // Dados estáticos
-    const mockVeiculo1 = { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' as const };
-    const mockVeiculo2 = { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' as const };
-    this.manutencoes = [
-      { id: 1, veiculoId: 1, data: '2025-06-15', tipo: 'Preventiva', descricao: 'Troca de óleo e filtros', valor: 450.00, quilometragem: 20000, veiculo: mockVeiculo1 },
-      { id: 2, veiculoId: 2, data: '2025-05-30', tipo: 'Corretiva', descricao: 'Reparo no freio dianteiro', valor: 850.00, quilometragem: 49500, veiculo: mockVeiculo2 }
-    ];
   }
 
   carregarVeiculos(): void {
-    // Lógica de integração comentada
-    /*
-    this.veiculoService.buscarVeiculos().subscribe(data => {
-      this.veiculosDisponiveis = data;
+    this.veiculoService.buscarVeiculos().subscribe({
+      next: (data) => {
+        this.veiculosDisponiveis = data;
+      },
+      error: (err) => console.error("Falha ao carregar veículos.", err)
     });
-    */
-    // Dados estáticos
-    this.veiculosDisponiveis = [
-      { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: 'Picape', ano: 2021, quilometragemAtual: 20000, status: 'Disponível' },
-      { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: 'Picape', ano: 2019, quilometragemAtual: 50000, status: 'Disponível' },
-    ];
   }
 
   salvarRegistro(): void {
-    if (!this.novoRegistro.veiculoId || !this.novoRegistro.data || !this.novoRegistro.valor || !this.novoRegistro.descricao) {
+    if (!this.novoRegistro.veiculoId || !this.novoRegistro.dataInicio || !this.novoRegistro.descricaoServico || !this.novoRegistro.custo || !this.novoRegistro.quilometragem) {
       alert('Preencha todos os campos obrigatórios!');
       return;
     }
 
-    // Lógica de integração comentada
-    /*
-    this.manutencaoService.registrarManutencao(this.novoRegistro).subscribe(() => {
-      alert('Manutenção registrada com sucesso!');
-      this.novoRegistro = { tipo: 'Preventiva' }; // Limpa o formulário
-      this.carregarDados(); // Atualiza as listas
+    this.manutencaoService.registrarManutencao(this.novoRegistro as any).subscribe({
+      next: () => {
+        alert('Manutenção registrada com sucesso! O status do veículo foi alterado para "Em Manutenção".');
+        this.limparFormulario();
+        this.carregarManutencoes(); 
+      },
+      error: (err) => {
+        const mensagemErro = err.error?.message || 'Ocorreu um erro desconhecido.';
+        alert(`Erro ao registrar manutenção: ${mensagemErro}`);
+        console.error(err);
+      }
     });
-    */
+  }
 
-    // Lógica estática
-    alert('Manutenção registrada (estático)!');
-    this.novoRegistro = { tipo: 'Preventiva' };
+  limparFormulario(): void {
+    this.novoRegistro = {
+      veiculoId: null,
+      dataInicio: '',
+      tipo: 'Preventiva',
+      descricaoServico: '',
+      custo: null,
+      quilometragem: null
+    };
   }
 }

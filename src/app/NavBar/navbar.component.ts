@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
   }
 
   get perfilAtual(): 'ADMIN' | 'MOTORISTA' | null {
-    return this.authService.getUserProfile();
+    return this.authService.getUserProfile() as 'ADMIN' | 'MOTORISTA' | null;
   }
 
   adminRotas = [

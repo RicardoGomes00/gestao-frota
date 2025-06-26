@@ -1,19 +1,18 @@
+import { Veiculo } from './veiculo.model';
+import { Motorista } from './motorista.model';
+
 export interface Viagem {
   id: number;
   destino: string;
   justificativa: string;
-  dataHoraSaida: string;
-  dataHoraRetorno?: string; 
+  
+  dataSaidaAgendada: string;
+
+  dataRetornoEfetiva?: string; 
   status: 'AGENDADO' | 'EM_USO' | 'FINALIZADO';
   quilometragemInicial?: number;
   quilometragemFinal?: number;
-  veiculo: { 
-    id: number;
-    placa: string;
-    modelo: string;
-  };
-  motorista: {
-    id: number;
-    nomeCompleto: string;
-  };
+  
+  veiculo?: Veiculo;
+  motorista?: Motorista;
 }

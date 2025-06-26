@@ -3,13 +3,10 @@ import { Motorista } from './motorista.model';
 
 export interface Abastecimento {
   id: number;
-  data: string; // ou Date
+  dataAbastecimento: string;
   tipoCombustivel: string;
-  valor: number;
-  quilometragem: number;
-  
-  veiculoId: number;
-  motoristaId: number;
+  valorTotal: number;
+  quilometragemNoAbastecimento: number;
   
   veiculo?: Veiculo;
   motorista?: Motorista;

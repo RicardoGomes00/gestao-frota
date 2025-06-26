@@ -2,47 +2,54 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-// 1. IMPORTE OS SERVIÇOS E MODELOS
 import { AbastecimentoService } from '../../Services/abastecimento.service';
 import { VeiculoService } from '../../Services/veiculo.service';
 import { MotoristaService } from '../../Services/motorista.service';
+
 import { Abastecimento } from '../../Models/abastecimento.model';
 import { Veiculo } from '../../Models/veiculo.model';
 import { Motorista } from '../../Models/motorista.model';
+import { AbastecimentoCreateDTO } from '../../Models/abastecimento-create.dto';
 
 @Component({
   selector: 'app-registrar-abastecimento',
   standalone: true,
-  imports: [ FormsModule, CommonModule ],
+  imports: [FormsModule, CommonModule],
   templateUrl: './registrar-abastecimento.component.html',
   styleUrls: ['./registrar-abastecimento.component.css'],
 })
 export class RegistrarAbastecimentoComponent implements OnInit {
-  // Listas de dados
   abastecimentos: Abastecimento[] = [];
   veiculosDisponiveis: Veiculo[] = [];
   motoristasDisponiveis: Motorista[] = [];
-  
-  // Objeto para o formulário
-  novoRegistro: Partial<Abastecimento> = {};
+
+  novoRegistro: AbastecimentoCreateDTO = {
+    veiculoId: null,
+    motoristaId: null,
+    dataAbastecimento: '',
+    tipoCombustivel: 'Gasolina',
+    valorTotal: null,
+    quilometragemNoAbastecimento: null
+  };
 
   isLoading = false;
+  isSaving = false;
+  error: string | null = null;
 
-  // 2. INJETE TODOS OS SERVIÇOS NECESSÁRIOS
   constructor(
     private abastecimentoService: AbastecimentoService,
     private veiculoService: VeiculoService,
     private motoristaService: MotoristaService
   ) {}
 
-  ngOnInit() {
-    this.carregarDados();
+  ngOnInit(): void {
+    this.carregarDadosIniciais();
   }
 
-  carregarDados(): void {
+  carregarDadosIniciais(): void {
     this.isLoading = true;
-    
-    // Simula o carregamento de todos os dados necessários
+    this.error = null;
+
     this.carregarAbastecimentos();
     this.carregarVeiculos();
     this.carregarMotoristas();
@@ -51,64 +58,75 @@ export class RegistrarAbastecimentoComponent implements OnInit {
   }
 
   carregarAbastecimentos(): void {
-    // Lógica de integração comentada
-    /*
-    this.abastecimentoService.buscarAbastecimentos().subscribe(data => {
-      this.abastecimentos = data;
+    this.abastecimentoService.buscarAbastecimentos().subscribe({
+      next: (data) => {
+        this.abastecimentos = data.sort((a, b) =>
+          new Date(b.dataAbastecimento).getTime() - new Date(a.dataAbastecimento).getTime()
+        );
+      },
+      error: (err) => {
+        this.error = 'Falha ao carregar registros de abastecimento.';
+        console.error(err);
+      }
     });
-    */
-    // Lógica estática
-    this.abastecimentos = [
-      { id: 1, veiculoId: 1, motoristaId: 2, data: '2025-06-24', tipoCombustivel: 'Gasolina', valor: 250.50, quilometragem: 20500, veiculo: { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' }, motorista: { id: 2, nomeCompleto: 'Carlos de Souza', cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', ativo: true, perfil: 'MOTORISTA', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' } },
-      { id: 2, veiculoId: 2, motoristaId: 2, data: '2025-06-20', tipoCombustivel: 'Diesel', valor: 350.00, quilometragem: 50200, veiculo: { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: '', ano: 0, quilometragemAtual: 0, status: 'Disponível' }, motorista: { id: 2, nomeCompleto: 'Carlos de Souza', cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', ativo: true, perfil: 'MOTORISTA', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' } }
-    ];
   }
 
   carregarVeiculos(): void {
-    // Lógica de integração comentada
-    /*
-    this.veiculoService.buscarVeiculos().subscribe(data => {
-      this.veiculosDisponiveis = data.filter(v => v.status !== 'Inativo');
+    this.veiculoService.buscarVeiculos().subscribe({
+      next: (data) => this.veiculosDisponiveis = data,
+      error: (err) => console.error('Falha ao carregar veículos.', err)
     });
-    */
-    // Lógica estática
-    this.veiculosDisponiveis = [
-      { id: 1, placa: 'ABC-1234', modelo: 'Fiat Toro', tipo: 'Picape', ano: 2021, quilometragemAtual: 20000, status: 'Disponível' },
-      { id: 2, placa: 'DEF-5678', modelo: 'Toyota Hilux', tipo: 'Picape', ano: 2019, quilometragemAtual: 50000, status: 'Em Manutenção' },
-    ];
   }
 
   carregarMotoristas(): void {
-    // Lógica de integração comentada
-    /*
-    this.motoristaService.buscarMotoristas().subscribe(data => {
-      this.motoristasDisponiveis = data.filter(m => m.ativo);
+    this.motoristaService.buscarMotoristas().subscribe({
+      next: (data) => this.motoristasDisponiveis = data.filter(m => m.ativo),
+      error: (err) => console.error('Falha ao carregar motoristas.', err)
     });
-    */
-    // Lógica estática
-    this.motoristasDisponiveis = [
-      { id: 1, nomeCompleto: 'Admin Principal', perfil: 'ADMIN', ativo: true, cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' },
-      { id: 2, nomeCompleto: 'Carlos de Souza', perfil: 'MOTORISTA', ativo: true, cpf: '', cnhNumero: '', cnhValidade: '', telefone: '', email: '', cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '' },
-    ];
   }
 
   salvarRegistro(): void {
-    if (!this.novoRegistro.veiculoId || !this.novoRegistro.data || !this.novoRegistro.valor) {
-      alert('Veículo, Data e Valor são obrigatórios!');
+    if (!this.novoRegistro.veiculoId || !this.novoRegistro.motoristaId || !this.novoRegistro.dataAbastecimento || !this.novoRegistro.valorTotal || !this.novoRegistro.quilometragemNoAbastecimento) {
+      alert('Preencha todos os campos obrigatórios!');
       return;
     }
 
-    // Lógica de integração comentada
-    /*
-    this.abastecimentoService.registrarAbastecimento(this.novoRegistro).subscribe(() => {
-      alert('Abastecimento registrado com sucesso!');
-      this.novoRegistro = {}; // Limpa o formulário
-      this.carregarAbastecimentos(); // Atualiza a lista
+    this.isSaving = true;
+
+    const payload: AbastecimentoCreateDTO = {
+      ...this.novoRegistro,
+      dataAbastecimento: new Date(this.novoRegistro.dataAbastecimento).toISOString()
+    };
+
+    this.abastecimentoService.registrarAbastecimento(payload).subscribe({
+      next: () => {
+        alert('Abastecimento registrado com sucesso!');
+        this.limparFormulario();
+        this.carregarAbastecimentos();
+        this.isSaving = false;
+      },
+      error: (err) => {
+        let mensagem = 'Erro desconhecido.';
+        if (typeof err.error === 'string') {
+          mensagem = err.error;
+        } else if (err.error?.message) {
+          mensagem = err.error.message;
+        }
+        alert(`Erro ao registrar abastecimento: ${mensagem}`);
+        console.error(err);
+        this.isSaving = false;
+      }
     });
-    */
-    
-    // Lógica estática
-    alert('Abastecimento registrado (estático)!');
-    this.novoRegistro = {}; // Limpa o formulário
+  }
+
+  limparFormulario(): void {
+    this.novoRegistro = {
+      veiculoId: null,
+      motoristaId: null,
+      dataAbastecimento: '',
+      tipoCombustivel: 'Gasolina',
+      valorTotal: null,
+      quilometragemNoAbastecimento: null
+    };
   }
 }

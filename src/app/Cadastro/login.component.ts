@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // Necessário para *ngIf
+import { CommonModule } from '@angular/common'; 
 import { AuthService } from '../Services/auth.service';
-import { Router } from '@angular/router'; // Router pode ser útil, mas o AuthService já redireciona
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-login',
@@ -14,8 +14,13 @@ import { Router } from '@angular/router'; // Router pode ser útil, mas o AuthSe
 export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string | null = null;
+  isLoading = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -27,13 +32,23 @@ export class LoginComponent {
       return;
     }
     
+    this.isLoading = true;
     this.errorMessage = null;
-    const { email, password } = this.loginForm.value;
-
-    const success = this.authService.login(email, password);
-
-    if (!success) {
-      this.errorMessage = 'E-mail ou senha inválidos.';
-    }
+    
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.perfil === 'admin') {
+          this.router.navigate(['/admin/inicio']);
+        } else {
+          this.router.navigate(['/motorista/inicio']);
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.message || 'E-mail ou senha inválidos.';
+        console.error(err);
+      }
+    });
   }
 }

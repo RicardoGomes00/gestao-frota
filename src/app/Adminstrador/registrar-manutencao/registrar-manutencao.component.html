@@ -1,13 +1,11 @@
 <div class="container">
   <h2>Registro de Manutenções</h2>
 
-  <!-- Formulário de Cadastro -->
-  <div class="card filtros"> <!-- Usando a classe 'filtros' para o layout -->
+  <div class="card filtros">
     <h3>Novo Registro de Manutenção</h3>
     
     <label>
       Veículo*:
-      <!-- Adicionamos o seletor de veículo, que é crucial -->
       <select [(ngModel)]="novoRegistro.veiculoId">
         <option [ngValue]="null" disabled>Selecione um veículo</option>
         <option *ngFor="let v of veiculosDisponiveis" [ngValue]="v.id">
@@ -16,35 +14,38 @@
       </select>
     </label>
 
-    <label>Data*:<input type="date" [(ngModel)]="novoRegistro.data" /></label>
+    <label>Data*:<input type="date" [(ngModel)]="novoRegistro.dataInicio" /></label>
     
     <label>Tipo*:<select [(ngModel)]="novoRegistro.tipo">
-        <option value="" disabled>Selecione o tipo</option>
         <option value="Preventiva">Preventiva</option>
         <option value="Corretiva">Corretiva</option>
       </select>
     </label>
 
-    <label>Valor (R$)*:<input type="number" [(ngModel)]="novoRegistro.valor" /></label>
+    <label>Custo (R$)*:<input type="number" [(ngModel)]="novoRegistro.custo" placeholder="Ex: 450.00" /></label>
     
-    <label>Quilometragem Atual*:<input type="number" [(ngModel)]="novoRegistro.quilometragem" /></label>
+    <label>Quilometragem Atual*:<input type="number" [(ngModel)]="novoRegistro.quilometragem" placeholder="Ex: 85300" /></label>
     
-    <label>Descrição*:<textarea rows="3" [(ngModel)]="novoRegistro.descricao"></textarea></label>
+    <label>Descrição do Serviço*:<textarea rows="3" [(ngModel)]="novoRegistro.descricaoServico"></textarea></label>
     
     <button (click)="salvarRegistro()" class="btn-acao">Registrar</button>
   </div>
 
 
-  <!-- Lista de Registros Recentes -->
   <h3>Registros Anteriores</h3>
   <p *ngIf="isLoading">Carregando registros...</p>
+  <p *ngIf="error" class="error-message">{{ error }}</p>
 
-  <div *ngIf="!isLoading">
+  <div *ngIf="!isLoading && !error">
+    <div *ngIf="manutencoes.length === 0" class="card">
+        <p>Nenhum registro de manutenção encontrado.</p>
+    </div>
+
     <div *ngFor="let registro of manutencoes" class="card">
       <p><strong>Veículo:</strong> {{ registro.veiculo?.modelo }} ({{ registro.veiculo?.placa }})</p>
-      <p><strong>Data:</strong> {{ registro.data | date:'dd/MM/yyyy' }} | <strong>Tipo:</strong> {{ registro.tipo }}</p>
-      <p><strong>Valor:</strong> {{ registro.valor | currency:'BRL' }}</p>
-      <p><strong>Descrição:</strong> {{ registro.descricao }}</p>
+      <p><strong>Data:</strong> {{ registro.dataInicio | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Custo:</strong> {{ registro.custo | currency:'BRL' }}</p>
+      <p><strong>Descrição:</strong> {{ registro.descricaoServico }}</p>
     </div>
   </div>
 </div>
